@@ -1,0 +1,19 @@
+types.enemy=[
+    {
+        name:'',
+        life:0,shield:0,defense:0,
+        speed:1,stun:1,
+		size:1,
+		hidden:false,
+        multi:1,
+		attachments:[],
+    }, {
+        name:'Normal',
+        life:4,shield:0,defense:0,
+        speed:1,stun:1,
+		size:1,
+		hidden:false,
+        multi:1,
+		attachments:[{name:'Arms',color:[100,200,100]},{name:'Body',color:[100,200,100]}],
+    },
+]
