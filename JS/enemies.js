@@ -7,13 +7,33 @@ types.enemy=[
 		hidden:false,
         multi:1,
 		attachments:[],
-    }, {
+    },{
         name:'Normal',
         life:4,shield:0,defense:0,
         speed:1,stun:1,
 		size:1,
 		hidden:false,
         multi:1,
-		attachments:[{name:'Arms',color:[100,200,100]},{name:'Body',color:[100,200,100]}],
+		attachments:[
+            {name:'Legs',color:[120,60,0]},
+            {name:'Arms',color:[100,200,100]},
+            {name:'Body',color:[100,200,100]},
+            {name:'Mouth',color:[0,0,0]},
+            {name:'Eyes',color:[0,0,0]},
+        ],
+    },{
+        name:'Speedy',
+        life:3,shield:0,defense:0,
+        speed:2,stun:1,
+		size:1,
+		hidden:false,
+        multi:1,
+		attachments:[
+            {name:'Legs',color:[120,60,0]},
+            {name:'Arms',color:[150,200,255]},
+            {name:'Body',color:[150,200,255]},
+            {name:'Mouth',color:[0,0,0]},
+            {name:'Eyes',color:[0,0,0]},
+        ],
     },
 ]

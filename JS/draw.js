@@ -18,10 +18,12 @@ function draw(){
             }
             for(let a=0,la=run.info.length;a<la;a++){
                 for(let b=0,lb=run.info[a].length;b<lb;b++){
-                    run.info[a][b].display()
+                    run.info[a][b].displayInfo()
                 }
             }
-            entities.spawner.update()
+            for(let c=0;c<game.speed;c++){
+                entities.spawner.update()
+            }
             entities.ui.display()
         break
     }

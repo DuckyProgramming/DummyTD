@@ -30,6 +30,12 @@ function findName(name,list){
 		}
 	}
 }
+function convert(value){
+	if(value>=10000){
+		return round(value/100)/10+'K'
+	}
+	return value
+}
 function setupMap(map){
 	game.path=[]
 	let path=''

@@ -3,7 +3,7 @@ types={
         {
             name:'Polluted Wasteland',
             path:[
-                'DDDDDDDDRRRR',
+                'DDDDDDDDRRRRRRRRRRUUUULLLLDDDDDDDDRRRRUUUULLLLLLLLUUUURRRRDDDDDDDDLLLLUUUURRRRRRRRRRDDDDDDDD',
             ],
         },
     ],
