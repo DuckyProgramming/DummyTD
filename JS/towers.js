@@ -1,0 +1,13 @@
+types.tower=[
+    {
+        name:'',size:0,
+        levels:[
+            {effect:[],reload:0,range:0,cost:0},
+        ],
+    },{
+        name:'Scout',size:15,
+        levels:[
+            {effect:[1,'Physical'],reload:60,range:100,cost:250},
+        ],
+    }
+]

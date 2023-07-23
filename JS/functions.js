@@ -36,6 +36,40 @@ function convert(value){
 	}
 	return value
 }
+function pointInsideBox(point,box){
+	return point.position.x>box.position.x-box.width/2&&point.position.x<box.position.x+box.width/2&&point.position.y>box.position.y-box.height/2&&point.position.y<box.position.y+box.height/2
+}
+function kill(index){
+	if(entities.enemies.length>0){
+		entities.enemies[constrain(index,0,entities.enemies.length-1)].life=0
+	}
+}
+function copyArray(base){
+	let list=[]
+	for(let a=0,la=base.length;a<la;a++){
+		list.push(base[a])
+	}
+	return list
+}
+function copyArrayStack(base){
+	let list=[]
+	for(let a=0,la=base.length;a<la;a++){
+		list.push([])
+		for(let b=0,lb=base[a].length;b<lb;b++){
+			list[a].push(base[a][b])
+		}
+	}
+	return list
+}
+function smoothAnim(anim,trigger,minPoint,maxPoint,speed){
+	if(trigger&&anim<maxPoint){
+		return min(round(anim*speed+1)/speed,maxPoint)
+	}
+	if(!trigger&&anim>minPoint){
+		return max(round(anim*speed-1)/speed,minPoint)
+	}
+	return anim
+}
 function setupMap(map){
 	game.path=[]
 	let path=''
@@ -54,4 +88,35 @@ function updateMouse(layer){
 	inputs.mouse.y=mouseY
 	inputs.rel.x=(inputs.mouse.x-width/2)/stage.scale+layer.width/2
 	inputs.rel.y=(inputs.mouse.y-height/2)/stage.scale+layer.height/2
+}
+function sortEnemies(type,enemies){
+	switch(type){
+		case 0:
+			let maximum=0
+			let list=[]
+			let sorted=[]
+			for(let a=0,la=enemies.length;a<la;a++){
+				list.push(a)
+			}
+			while(list.length>0){
+				for(let a=0,la=list.length;a<la;a++){
+					maximum=max(maximum,enemies[list[a]].movement.totalProgress)
+				}
+				for(let a=0,la=list.length;a<la;a++){
+					if(enemies[list[a]].movement.totalProgress==maximum){
+						sorted.push(list[a])
+						list.splice(a,1)
+						a--
+						la--
+					}
+				}
+				maximum=0
+			}
+			return sorted
+	}
+}
+function kill(){
+	for(let a=0,la=entities.enemies.length;a<la;a++){
+		entities.enemies[a].life=0
+	}
 }

@@ -5,13 +5,17 @@ function draw(){
     switch(stage.scene){
         case 'level':
             graphics.main.image(graphics.backgrounds[game.map],0,0,graphics.main.width,graphics.main.height)
+            game.sortedEnemies=sortEnemies(0,entities.enemies)
             for(let a=0,la=run.fore.length;a<la;a++){
                 for(let b=0,lb=run.fore[a].length;b<lb;b++){
                     run.fore[a][b].display()
-                    for(let c=0;c<game.speed;c++){
+                    for(let c=0,lc=game.speeds[game.speed];c<lc;c++){
                         run.fore[a][b].update()
                         if(run.fore[a][b].remove){
                             run.fore[a].splice(b,1)
+                            b--
+                            lb--
+                            c=lc
                         }
                     }
                 }
@@ -21,7 +25,7 @@ function draw(){
                     run.info[a][b].displayInfo()
                 }
             }
-            for(let c=0;c<game.speed;c++){
+            for(let c=0,lc=game.speeds[game.speed];c<lc;c++){
                 entities.spawner.update()
             }
             entities.ui.display()

@@ -1,5 +1,4 @@
-Enemies:
-2
+Enemies
 3
 4
 5
@@ -9,7 +8,6 @@ Enemies:
 9
 10
 
-Enemy Health Bars
 Enemy Dying
 
 Tower
