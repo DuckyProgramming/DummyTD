@@ -3,6 +3,7 @@ function setupGraphics(){
 	textAlign(CENTER,CENTER)
 	rectMode(CENTER)
 	colorMode(RGB,255,255,255,1)
+	setupTrig()
 	graphics.main=createGraphics(900,600)
 	setupLayer(graphics.main)
 	graphics.backgrounds=[]
@@ -28,4 +29,20 @@ function setupGraphics(){
 	graphics.backgrounds[0].ellipse(500,200,100,100)
 	graphics.backgrounds[0].ellipse(300,400,100,100)
 	graphics.backgrounds[0].ellipse(500,400,100,100)
+}
+function setupTrig(){
+	for(let a=0,la=180;a<la;a++){
+		constants.trig[0].push(sin(a))
+		constants.trig[1].push(cos(a))
+	}
+	for(let a=0,la=180;a<la;a++){
+		constants.trig[0].push(-constants.trig[0][a])
+		constants.trig[1].push(constants.trig[1][179-a])
+	}
+}
+function lsin(direction){
+	return constants.trig[0][floor((direction%360+360)%360)]
+}
+function lcos(direction){
+	return constants.trig[1][floor((direction%360+360)%360)]
 }

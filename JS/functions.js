@@ -92,25 +92,29 @@ function updateMouse(layer){
 function sortEnemies(type,enemies){
 	switch(type){
 		case 0:
-			let maximum=0
+			let maximum=-1000
 			let list=[]
 			let sorted=[]
 			for(let a=0,la=enemies.length;a<la;a++){
 				list.push(a)
 			}
-			while(list.length>0){
-				for(let a=0,la=list.length;a<la;a++){
-					maximum=max(maximum,enemies[list[a]].movement.totalProgress)
-				}
-				for(let a=0,la=list.length;a<la;a++){
-					if(enemies[list[a]].movement.totalProgress==maximum){
-						sorted.push(list[a])
-						list.splice(a,1)
-						a--
-						la--
+			for(let a=0,la=list.length;a<la;a++){
+				if(list.length>0){
+					for(let a=0,la=list.length;a<la;a++){
+						maximum=max(maximum,enemies[list[a]].movement.totalProgress)
 					}
+					for(let a=0,la=list.length;a<la;a++){
+						if(enemies[list[a]].movement.totalProgress==maximum){
+							sorted.push(list[a])
+							list.splice(a,1)
+							a--
+							la--
+						}
+					}
+					maximum=-1000
+				}else{
+					la=0
 				}
-				maximum=0
 			}
 			return sorted
 	}
@@ -119,4 +123,7 @@ function kill(){
 	for(let a=0,la=entities.enemies.length;a<la;a++){
 		entities.enemies[a].life=0
 	}
+}
+function spawn(name){
+	entities.spawner.quickSpawn(findName(name,types.enemy))
 }

@@ -10,8 +10,9 @@ types={
 }
 stage={scale:0,scene:'level'}
 game={speed:0,speeds:[1,2,4,6],timer:0,mode:0,map:0,path:[],towers:[1,1,1,1,1,1,1,1],sortedEnemies:[],money:1000,lives:100}
-entities={enemies:[],towers:[],spawner:0,ui:0}
-run={fore:[entities.towers,entities.enemies],info:[entities.towers,entities.enemies]}
+constants={trig:[[],[]]}
+entities={enemies:[],towers:[],particles:[],spawner:0,ui:0}
+run={fore:[],info:[]}
 graphics={main:0,backgrounds:[]}
 transition={trigger:false,anim:0,scene:stage.scene}
 inputs={mouse:{x:0,y:0},rel:{x:0,y:0}}

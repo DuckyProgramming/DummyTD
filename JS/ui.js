@@ -40,9 +40,10 @@ class ui{
         this.layer.fill(0)
         this.layer.textSize(10)
         for(let a=0,la=this.towerNumber;a<la;a++){
-            this.layer.text(this.towerData[a].levels[0].cost,this.layer.width-50,104+a*40)
+            this.layer.text(this.towerData[a].levels[0].lcost,this.layer.width-50,104+a*40)
         }
         if(this.place.lastIndex>=0){
+            this.place.tower.anim.selected=1
             this.place.tower.fade=smoothAnim(this.place.tower.fade,this.place.index>=0,0,1,10)
             this.place.tower.position={x:inputs.rel.x,y:inputs.rel.y}
             this.place.tower.display()
@@ -51,21 +52,21 @@ class ui{
     addTower(){
     }
     onClick(mouse){
-        if(mouse.x<this.layer.width-100){
+        if(inputs.rel.x<this.layer.width-100){
             for(let a=0,la=entities.towers.length;a<la;a++){
                 entities.towers[a].selected=false
             }
-            if(this.place.index>0){
+            if(this.place.index>=0){
                 let clear=true
                 for(let a=0,la=entities.towers.length;a<la;a++){
                     if(dist(entities.towers[a].position.x,entities.towers[a].position.y,inputs.rel.x,inputs.rel.y)<this.place.tower.size+entities.towers[a].size){
                         clear=false
                     }
                 }
-                if(clear&&game.money>=this.towerData[this.place.index].levels[0].cost){
+                if(clear&&game.money>=this.towerData[this.place.index].levels[0].lcost){
                     entities.towers.push(new tower(this.layer,inputs.rel.x,inputs.rel.y,this.towers[this.place.index],0,this.place.id))
                     entities.towers[entities.towers.length-1].selected=true
-                    game.money-=this.towerData[this.place.index].levels[0].cost
+                    game.money-=this.towerData[this.place.index].levels[0].lcost
                     this.place.id++
                     this.place.index=-1
                 }
@@ -78,7 +79,7 @@ class ui{
             }
         }
         for(let a=0,la=this.towerNumber;a<la;a++){
-            if(pointInsideBox({position:mouse},{position:{x:this.layer.width-50,y:96+a*40},width:80,height:30})&&game.money>=this.towerData[a].levels[0].cost){
+            if(pointInsideBox({position:mouse},{position:{x:this.layer.width-50,y:96+a*40},width:80,height:30})&&game.money>=this.towerData[a].levels[0].lcost){
                 if(this.place.index==a){
                     this.place.index=-1
                 }else{

@@ -9,6 +9,7 @@ class tower extends entity{
         this.effect=types.tower[this.type].levels[this.level].effect
         this.reload=types.tower[this.type].levels[this.level].reload
         this.range=types.tower[this.type].levels[this.level].range
+        this.hidden=types.tower[this.type].levels[this.level].hidden
 
         this.direction=0
         this.scale=1
@@ -28,6 +29,9 @@ class tower extends entity{
     display(){
         this.layer.push()
         this.layer.translate(this.position.x,this.position.y)
+        this.layer.fill(0,this.fade*this.anim.selected*0.2)
+        this.layer.noStroke()
+        this.layer.ellipse(0,0,this.range*2)
         this.layer.rotate(this.direction)
         this.layer.scale(this.scale)
         switch(this.name){
@@ -68,8 +72,8 @@ class tower extends entity{
             this.reloadTimer--
         }else{
             for(let a=0,la=game.sortedEnemies.length;a<la;a++){
-                if(dist(this.position.x,this.position.y,entities.enemies[game.sortedEnemies[a]].position.x,entities.enemies[game.sortedEnemies[a]].position.y)<this.range+15*entities.enemies[game.sortedEnemies[a]].size){
-                    let target=entities.enemies[game.sortedEnemies[a]]
+                let target=entities.enemies[game.sortedEnemies[a]]
+                if(dist(this.position.x,this.position.y,target.position.x,target.position.y)<this.range+12*target.size&&!(target.hidden&&!this.hidden)){
                     target.takeDamage(this.effect[0],this.effect[1])
                     this.direction=atan2(target.position.x-this.position.x,this.position.y-target.position.y)
                     this.reloadTimer=this.reload

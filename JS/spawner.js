@@ -6,7 +6,10 @@ class spawner{
         this.wave=0
         this.points=points
 
-        entities.enemies.push(new enemy(this.layer,this.points[0].x,this.points[0].y,types.enemy.length-1,0))
+        this.quickSpawn(types.enemy.length-1)
+    }
+    quickSpawn(type){
+        entities.enemies.push(new enemy(this.layer,this.points[0].x,this.points[0].y,type,0))
     }
     loadWaves(waves){
         for(let a=0,la=waves.length;a<la;a++){
