@@ -19,12 +19,17 @@ class tower extends entity{
 
         this.anim={
             selected:0,
+            stun:[0],
         }
+        this.stun=[0]
         switch(this.name){
             case 'Scout':
                 this.anim.weapon={fired:0,firetick:0}
             break
         }
+    }
+    applyStun(value,type){
+        this.stun[type]=max(this.stun[type],value)
     }
     display(){
         this.layer.push()
@@ -51,11 +56,25 @@ class tower extends entity{
                 this.layer.arc(0,-10,12,6,30,150)
             break
         }
+        for(let a=0,la=this.anim.stun.length;a<la;a++){
+            if(this.anim.stun[a]>0){
+                switch(a){
+                    case 0:
+                        this.layer.stroke(255,255,255,this.fade*this.anim.stun[a])
+                        this.layer.strokeWeight(3)
+                        this.layer.point(lsin(this.time*5)*8,lcos(this.time*5)*8)
+                        this.layer.point(lsin(this.time*5+120)*8,lcos(this.time*5+120)*8)
+                        this.layer.point(lsin(this.time*5+240)*8,lcos(this.time*5+240)*8)
+                    break
+                }
+            }
+        }
         this.layer.pop()
     }
     displayInfo(){
     }
     update(){
+        super.update()
         switch(this.name){
             case 'Scout':
                 if(this.anim.weapon.firetick>0){
@@ -68,6 +87,12 @@ class tower extends entity{
         }
         this.fade=smoothAnim(this.fade,!this.selling,0,1,10)
         this.anim.selected=smoothAnim(this.anim.selected,this.selected,0,1,10)
+        for(let a=0,la=this.stun.length;a<la;a++){
+            if(this.stun[a]>0){
+                this.stun[a]--
+            }
+            this.anim.stun[a]=smoothAnim(this.anim.stun[a],this.stun[a]>0,0,1,10)
+        }
         if(this.reloadTimer>0){
             this.reloadTimer--
         }else{

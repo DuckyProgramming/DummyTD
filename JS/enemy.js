@@ -52,6 +52,7 @@ class enemy extends entity{
         this.anim={
             life:1,
             size:1,
+            attachments:[],
         }
 
         this.movement=movement
@@ -74,6 +75,16 @@ class enemy extends entity{
                 this.anim.hand=0
                 this.operation={timer:0}
             break
+        }
+        for(let a=0,la=this.attachments.length;a<la;a++){
+            switch(this.attachments[a].name){
+                case 'FallenRusherArms': case 'FallenRusherShield':
+                    this.anim.attachments.push({main:0})
+                break
+                default:
+                    this.anim.attachments.push(0)
+                break
+            }
         }
     }
     takeDamage(damage,typeName){
@@ -112,10 +123,10 @@ class enemy extends entity{
                         break
                         case 'Arms':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
-                            this.layer.rotate((lsin(this.rates.main*4))*20)
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
                             this.layer.ellipse(-15,0,12,12)
                             this.layer.ellipse(15,0,12,12)
-                            this.layer.rotate((lsin(this.rates.main*4))*-20)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
                         break
                         case 'Legs':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
@@ -134,7 +145,7 @@ class enemy extends entity{
                             this.layer.point(4,2)
                         break
                         case 'Armchain':
-                            this.layer.rotate((lsin(this.rates.main*4))*20)
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
                             this.layer.stroke(50,this.fade)
                             this.layer.strokeWeight(1)
                             this.layer.ellipse(-16,-1.7,3,3)
@@ -145,7 +156,7 @@ class enemy extends entity{
                             this.layer.ellipse(16,1.7,3,3)
                             this.layer.ellipse(15,-5,3,3)
                             this.layer.ellipse(15,5,3,3)
-                            this.layer.rotate((lsin(this.rates.main*4))*-20)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
                         break
                         case 'Body-Transparent':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*this.attachments[a].color[3])
@@ -153,10 +164,10 @@ class enemy extends entity{
                         break
                         case 'Arms-Transparent':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*this.attachments[a].color[3])
-                            this.layer.rotate((lsin(this.rates.main*4))*20)
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
                             this.layer.ellipse(-15,0,12,12)
                             this.layer.ellipse(15,0,12,12)
-                            this.layer.rotate((lsin(this.rates.main*4))*-20)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
                         break
                         case 'Legs-Transparent':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*this.attachments[a].color[3])
@@ -186,10 +197,10 @@ class enemy extends entity{
                         break
                         case 'Arms-Varying':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*map(constrain(this.life/this.base.life,0,1),0,1,this.attachments[a].color[3],this.attachments[a].color[4]))
-                            this.layer.rotate((lsin(this.rates.main*4))*20)
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
                             this.layer.ellipse(-15,0,13,13)
                             this.layer.ellipse(15,0,13,13)
-                            this.layer.rotate((lsin(this.rates.main*4))*-20)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
                         break
                         case 'Legs-Varying':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*map(constrain(this.life/this.base.life,0,1),0,1,this.attachments[a].color[3],this.attachments[a].color[4]))
@@ -216,7 +227,7 @@ class enemy extends entity{
                         break
                         case 'ArmsDiamondPlate-Varying':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*map(constrain(this.life/this.base.life,0,1),0,1,this.attachments[a].color[3],this.attachments[a].color[4]))
-                            this.layer.rotate((lsin(this.rates.main*4))*20+45)
+                            this.layer.rotate(lsin(this.rates.main*4)*20+45)
                             this.layer.ellipse(-10.5,10.5,6.5,2.5)
                             this.layer.ellipse(10.5,-10.5,6.5,2.5)
                             this.layer.ellipse(-5.5,10.5,2,8)
@@ -227,7 +238,7 @@ class enemy extends entity{
                             this.layer.arc(-10.5,15.5,2,6.5,-180,0)
                             this.layer.arc(10.5,-5.5,2,6.5,-180,0)
                             this.layer.arc(10.5,-15.5,2,6.5,0,180)
-                            this.layer.rotate((lsin(this.rates.main*4))*-20-45)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20-45)
                         break
                         case 'Cloak':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
@@ -236,26 +247,131 @@ class enemy extends entity{
                         case 'Scythe':
                             this.layer.stroke(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade)
                             this.layer.strokeWeight(2)
-                            this.layer.rotate((lsin(this.rates.main*4))*20)
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
                             this.layer.line(-15,this.anim.hand,-15,20+this.anim.hand)
                             this.layer.noStroke()
                             this.layer.fill(this.attachments[a].color[1][0],this.attachments[a].color[1][1],this.attachments[a].color[1][2],this.fade)
                             this.layer.triangle(-14,20+this.anim.hand,-14,14+this.anim.hand,-2,15+this.anim.hand)
-                            this.layer.rotate((lsin(this.rates.main*4))*-20)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
                         break
                         case 'OneMovedArms':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
-                            this.layer.rotate((lsin(this.rates.main*4))*20)
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
                             this.layer.ellipse(-15,this.anim.hand,12,12)
                             this.layer.ellipse(15,0,12,12)
-                            this.layer.rotate((lsin(this.rates.main*4))*-20)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
                         break
-
+                        case 'FallenBody':
+                            for(let b=0,lb=5;b<lb;b++){
+                                this.layer.fill(this.attachments[a].color[0]*(0.8+b*0.2),this.attachments[a].color[1]*(0.8+b*0.2),this.attachments[a].color[2]*(0.8+b*0.2),this.fade)
+                                this.layer.ellipse(0,0,24*(1-b/lb),24*(1-b/lb))
+                            }
+                        break
+                        case 'FallenArms':
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
+                            for(let b=0,lb=5;b<lb;b++){
+                                this.layer.fill(this.attachments[a].color[0]*(0.8+b*0.2),this.attachments[a].color[1]*(0.8+b*0.2),this.attachments[a].color[2]*(0.8+b*0.2),this.fade)
+                                this.layer.ellipse(-15,0,12*(1-b/lb),12*(1-b/lb))
+                                this.layer.ellipse(15,0,12*(1-b/lb),12*(1-b/lb))
+                            }
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
+                        break
+                        case 'ChainRust':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+        					this.layer.triangle(7,0,0,7,7,12)
+                        break
+                        case 'Chained':
+                            this.layer.rotate(30)
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.noFill()
+                            this.layer.strokeWeight(1)
+                            this.layer.ellipse(6,9,3,3)
+                            this.layer.ellipse(5.4,6,3,3)
+                            this.layer.ellipse(4.2,3,3,3)
+                            this.layer.ellipse(2.4,0.6,3,3)
+                            this.layer.ellipse(0.6,-1.8,3,3)
+                            this.layer.ellipse(-2.4,-3.9,3,3)
+                            this.layer.ellipse(-5.4,-5.4,3,3)
+                            this.layer.ellipse(-8.4,-6.6,3,3)
+                            this.layer.rotate(-30)
+                        break
+                        case 'HiddenString':
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.strokeWeight(3)
+                            this.layer.rotate(-18)
+                            for(let a=0,la=4;a<la;a++){
+                                this.layer.line(lsin(this.time*8+a*25)*2,-14-a*2,lsin(this.time*8+(a-1)*25)*2,-14-a*2+2)
+                            }
+                            this.layer.rotate(36)
+                            for(let a=0,la=4;a<la;a++){
+                                this.layer.line(lsin(this.time*8+a*25+70)*-2,-14-a*2,sin(this.time*8+(a-1)*25+70)*-2,-14-a*2+2)
+                            }
+                            this.layer.rotate(-18)
+                        break
+                        case 'FallenRusherArms':
+                            for(let b=0,lb=5;b<lb;b++){
+                                this.layer.fill(this.attachments[a].color[0]*(0.8+b*0.2),this.attachments[a].color[1]*(0.8+b*0.2),this.attachments[a].color[2]*(0.8+b*0.2),this.fade)
+                                this.layer.ellipse(map(this.anim.attachments[a].main,0,1,-6,-15*lcos(lsin(this.rates.main*4)*20)),map(this.anim.attachments[a].main,0,1,13,-15*lsin(lsin(this.rates.main*4)*20)),12*(1-b/lb),12*(1-b/lb))
+                                this.layer.ellipse(map(this.anim.attachments[a].main,0,1,6,15*lcos(lsin(this.rates.main*4)*20)),map(this.anim.attachments[a].main,0,1,13,15*lsin(lsin(this.rates.main*4)*20)),12*(1-b/lb),12*(1-b/lb))
+                            }
+                        break
+                        case 'FallenRusherShield':
+                            this.layer.fill(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade*(1-this.anim.attachments[a].main))
+				            this.layer.rect(0,20,24,8,3)
+                            this.layer.fill(this.attachments[a].color[1][0],this.attachments[a].color[1][1],this.attachments[a].color[1][2],this.fade*(1-this.anim.attachments[a].main))
+				            this.layer.rect(0,20,18,2,1.5)
+                        break
+                        case 'SmallBody':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.ellipse(0,0,15,15)
+                        break
+                        case 'SmallMouth':
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.strokeWeight(1.25)
+                            this.layer.line(-2.5,4.375,2.5,4.375)
+                        break
+                        case 'SmallEyes':
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.strokeWeight(1.875)
+                            this.layer.point(-2.5,1.25)
+                            this.layer.point(2.5,1.25)
+                        break
 
 
 
 
                     }
+                    /*case 'Body':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.ellipse(0,0,24,24)
+                        break
+                        case 'Arms':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
+                            this.layer.ellipse(-15,0,12,12)
+                            this.layer.ellipse(15,0,12,12)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
+                        break
+                        case 'Legs':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.ellipse(5,(lsin(this.rates.main*4))*-7,12,12)
+                            this.layer.ellipse(-5,(lsin(this.rates.main*4))*7,12,12)
+                        break
+                        case 'Mouth':
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.strokeWeight(2)
+                            this.layer.line(-4,7,4,7)
+                        break
+                        case 'Eyes':
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.strokeWeight(3)
+                            this.layer.point(-4,2)
+                            this.layer.point(4,2)
+                        break
+                        case 'MathArms':
+                            this.layer.ellipse(-15*lcos(lsin(this.rates.main*4)*20),-15*lsin(lsin(this.rates.main*4)*20),12,12)
+                            this.layer.ellipse(15*lcos(lsin(this.rates.main*4)*20),15*lsin(lsin(this.rates.main*4)*20),12,12)
+                        break*/
                 }
             break
         }
@@ -360,23 +476,30 @@ class enemy extends entity{
                 }
                 this.direction=round(this.direction/90)*90
             }
+            for(let a=0,la=this.attachments.length;a<la;a++){
+                switch(this.attachments[a].name){
+                    case 'FallenRusherArms': case 'FallenRusherShield':
+                        this.anim.attachments[a].main=smoothAnim(this.anim.attachments[a].main,this.life/this.base.life<this.attachments[a].metric,0,1,15)
+                    break
+                }
+            }
             switch(this.name){
-                case 'Hidden':
+                case 'Hidden': case 'Shadow Boss':
                     if(this.time%15==0){
                         entities.particles.push(new particle(this.layer,this.position.x,this.position.y,1,[65,65,65],this.size,random(0,360)))
                     }
                 break
+                case 'Fallen Rusher':
+                    this.speed=this.recall.speed*(this.life<this.base.life*0.875?1/3:1)
+                break
             }
             switch(this.name){
                 case 'Fallen Reaper':
-                    this.operation.timer--
-                    if(this.operation.timer<=0){
-                        this.operation.timer=510
-                    }
-                    if(this.operation.timer>450){
-                        this.anim.hand+=this.operation.timer>480?0.35:-0.35
+                    this.operation.timer++
+                    if(this.operation.timer%510<60){
+                        this.anim.hand+=this.operation.timer%510<=30?0.35:-0.35
                         this.speed=0
-                        if(this.operation.timer==480){
+                        if(this.operation.timer%510==30){
                             this.summonPosition(floor(random(2,4)),30,this.spawns)
                         }
                     }
@@ -396,6 +519,14 @@ class enemy extends entity{
                             progress:this.movement.progress,
                             totalProgress:this.movement.totalProgress-50,
                         }))
+                    break
+                    case 'Boomer':
+                        entities.particles.push(new particle(this.layer,this.position.x,this.position.y,2,[85,165,125],30,0))
+                        for(let a=0,la=entities.towers.length;a<la;a++){
+                            if(dist(this.position.x,this.position.y,entities.towers[a].position.x,entities.towers[a].position.y)<140){
+                                entities.towers[a].applyStun(180,0)
+                            }
+                        }
                     break
                 }
                 this.trigger.death=true

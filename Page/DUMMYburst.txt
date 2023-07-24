@@ -1,0 +1,533 @@
+burst = function(x,y,type,size,direction){
+	this.x = x;
+	this.y = y;
+	this.type = type;
+	this.size = size;
+	this.direction = direction;
+	this.burst = true;
+	this.drop = false;
+	this.aff = false;
+	if(this.type === 0||this.type === 2||this.type === 4||this.type === 8||this.type === 10||this.type === 13||this.type === 17||this.type === 18||this.type === 19||this.type === 21||this.type === 22||this.type === 23||this.type === 26||this.type === 31||this.type === 32||this.type === 33||this.type === 34||this.type === 35||this.type === 37||this.type === 38||this.type === 39||this.type === 56||this.type === 58){
+		this.fade = 255;
+		this.size2 = 1;
+		if(this.type === 13){
+			this.color = [255,255,255];
+		}
+		else if(this.type === 19||this.type === 22||this.type === 39){
+			this.color = [230,random(0,150),0];
+			if(this.type === 22){
+				this.speed = 0;
+			}
+		}
+		else if(this.type === 21||this.type === 23||this.type === 33||this.type === 35){
+			this.up = false;
+			this.fade = 0;
+		}
+		else if(this.type === 26){
+			this.color = [0,random(0,255),255];
+			this.value = floor(random(0,2));
+			this.fade = 320;
+		}
+		else if(this.type === 31){
+			this.color = [0,random(100,255),0];
+		}
+	}
+	else if(this.type === 1||this.type === 3||this.type === 6||this.type === 7||this.type === 9||this.type === 11||this.type === 12||this.type === 15||this.type === 16||this.type === 24||this.type === 25||this.type === 27||this.type === 28||this.type === 29||this.type === 36||this.type === 41||this.type === 42||this.type === 43||this.type === 44||this.type === 45||this.type === 46||this.type === 47||this.type === 48||this.type === 49||this.type === 50||this.type === 52||this.type === 54||this.type === 55||this.type === 57){
+		this.size2 = 0.01;
+		this.fade = 255;
+		if(this.type === 43){
+			this.color = [230,180,240];
+		}
+		else if(this.type === 44){
+			this.color = [255,200,255];
+		}
+		else if(this.type === 45){
+			this.color = [255,255,255];
+		}
+		else if(this.type === 46){
+			this.color = [255,220,150];
+		}
+		else if(this.type === 9){
+			this.color = [60,20,120];
+		}
+		else if(this.type === 3||this.type === 24){
+			this.color = [0,205,255];
+		}
+	}
+	else if(this.type === 5||this.type === 14||this.type === 20||this.type === 30||this.type === 51||this.type === 53){
+		this.fade = 0;
+		this.size2 = 1;
+		this.up = false;
+		if(this.type === 14){
+			this.color = [80,255,80];
+		}
+		else if(this.type === 20||this.type === 51){
+			this.value = 0;
+			this.direction = random(0,360);
+		}
+	}
+	else if(this.type === 40){
+		this.fade = 0;
+		this.size2 = 60;
+		this.color = [193,0,133];
+	}
+	else if(this.type === 59){
+		this.fade = 0;
+		this.size2 = 60;
+		this.color = [255,230,255];
+	}
+}
+burst.prototype.draw = function(){
+	translate(this.x,this.y);
+	rotate(this.direction);
+	scale(this.size*this.size2);
+	switch(this.type){
+		case 0:
+			noStroke();
+			fill(65,this.fade);
+			ellipse(0,0,1,1);
+		break;
+		case 1:
+			noFill();
+			stroke(85,165,125,this.fade);
+			strokeWeight(8);
+			ellipse(0,0,100,100);
+		break;
+		case 2:
+			noStroke();
+			fill(85,this.fade);
+			ellipse(0,0,1,1);
+		break;
+		case 3: case 24:
+			noFill();
+			stroke(this.color[0],this.color[1],this.color[2],this.fade);
+			strokeWeight(5);
+			ellipse(0,0,100,100);
+		break;
+		case 4:
+			noStroke();
+			fill(0,205,255,this.fade);
+			ellipse(0,0,1,1);
+		break;
+		case 5:
+			fill(0,205,255,this.fade);
+			noStroke();
+			beginShape();
+			vertex(1,-20);
+			vertex(-8,3);
+			vertex(1,3);
+			vertex(-1,20);
+			vertex(8,-3);
+			vertex(-1,-3);
+			endShape();
+		break;
+		case 6: case 28:
+			noFill();
+			stroke(0,this.fade);
+			strokeWeight(15);
+			ellipse(0,0,100,100);
+		break;
+		case 7:
+			noStroke();
+			fill(255,0,0,this.fade*2/3);
+			ellipse(0,0,75,75);
+			fill(185,0,0,this.fade*2/3);
+			ellipse(0,0,50,50);
+			fill(115,0,0,this.fade*2/3);
+			ellipse(0,0,25,25);
+		break;
+		case 8:
+			noStroke();
+			fill(25,90,25,this.fade);
+			ellipse(0,0,1,1);
+		break;
+		case 9:
+			noFill();
+			stroke(this.color[0],this.color[1],this.color[2],this.fade);
+			strokeWeight(8);
+			ellipse(0,0,100,100);
+		break;
+		case 10:
+			noStroke();
+			fill(0,this.fade);
+			ellipse(0,0,1,1);
+		break;
+		case 11:
+			noFill();
+			stroke(50,0,50,this.fade);
+			strokeWeight(10);
+			arc(0,0,100,100,-25,25);
+		break;
+		case 12:
+			noStroke();
+			fill(255,225,0,this.fade*2/3);
+			ellipse(0,0,105,105);
+			fill(255,115,0,this.fade*2/3);
+			ellipse(0,0,70,70);
+			fill(255,0,0,this.fade*2/3);
+			ellipse(0,0,35,35);
+		break;
+		case 13: case 19: case 22: case 31: case 39: case 40: case 43: case 44: case 45: case 46: case 59:
+			noStroke();
+			fill(this.color[0],this.color[1],this.color[2],this.fade);
+			ellipse(0,0,1,1);
+		break;
+		case 14:
+			fill(this.color[0],this.color[1],this.color[2],this.fade);
+			noStroke();
+			rect(-4,-16,8,32);
+			rect(-16,-4,32,8);
+		break;
+		case 15:
+			noFill();
+			stroke(80,255,80,this.fade);
+			strokeWeight(8);
+			ellipse(0,0,100,100);
+		break;
+		case 16:
+			noStroke();
+			fill(0,255,0,this.fade*2/3);
+			ellipse(0,0,105,105);
+			fill(100,255,0,this.fade*2/3);
+			ellipse(0,0,70,70);
+			fill(200,255,0,this.fade*2/3);
+			ellipse(0,0,35,35);
+		break;
+		case 17:
+			stroke(150,this.fade);
+			noFill();
+			strokeWeight(4);
+			ellipse(0,0,9,9);
+		break;
+		case 18:
+			stroke(80,this.fade);
+			noFill();
+			strokeWeight(4);
+			line(-4,0,4,0);
+			line(0,-4,0,4);
+		break;
+		case 20:
+			rotate(-this.direction);
+			fill(255,230,0,this.fade);
+			noStroke();
+			textSize(25);
+			text("$"+amplify(this.value),0,0);
+			rotate(this.direction);
+		break;
+		case 21:
+			noStroke();
+			fill(30,this.fade);
+			ellipse(0,0,1,1);
+		break;
+		case 23:
+			noStroke();
+			fill(0,255,0,this.fade);
+			ellipse(0,0,1,1);
+		break;
+		case 25:
+			noFill();
+			stroke(190,200,195,this.fade);
+			strokeWeight(8);
+			ellipse(0,0,100,100);
+		break;
+		case 26:
+			rotate(-this.direction);
+			fill(this.color[0],this.color[1],this.color[2],this.fade);
+			noStroke();
+			textSize(1);
+			text(this.value,0,0);
+			rotate(this.direction);
+		break;
+		case 27:
+			noStroke();
+			fill(0,255,255,this.fade*2/3);
+			ellipse(0,0,105,105);
+			fill(0,155,255,this.fade*2/3);
+			ellipse(0,0,70,70);
+			fill(0,55,255,this.fade*2/3);
+			ellipse(0,0,35,35)
+		break;
+		case 29:
+			noFill();
+			stroke(255,255,20,this.fade);
+			strokeWeight(8);
+			ellipse(0,0,100,100);
+		break;
+		case 30:
+			fill(100,210,255,this.fade);
+			noStroke();
+			textSize(25);
+			text("Bruh",0,0);
+		break;
+		case 32:
+			noStroke();
+			fill(80,15,80,this.fade);
+			ellipse(0,0,1,1);
+		break;
+		case 33:
+			noStroke();
+			fill(93,104,85,this.fade);
+			ellipse(0,0,1,1);
+		break;
+		case 34:
+			noStroke();
+			fill(100,255,100,this.fade);
+			ellipse(0,0,1,1);
+		break;
+		case 35:
+			noStroke();
+			fill(110,55,0,this.fade);
+			ellipse(0,0,1,1);
+		break;
+		case 36:
+			noFill();
+			stroke(30,255,30,this.fade);
+			strokeWeight(8);
+			ellipse(0,0,100,100);
+		break;
+		case 37:
+			noStroke();
+			fill(95,110,75,this.fade);
+			ellipse(0,0,1,1);
+		break;
+		case 38:
+			noStroke();
+			fill(0,150,255,this.fade);
+			ellipse(0,0,1,1);
+		break;
+		case 41:
+			noFill();
+			stroke(80,0,120,this.fade);
+			strokeWeight(8);
+			ellipse(0,0,100,100);
+		break;
+		case 42:
+			noFill();
+			stroke(255,this.fade);
+			strokeWeight(8);
+			ellipse(0,0,100,100);
+		break;
+		case 47:
+			noFill();
+			stroke(25,60,255,this.fade);
+			strokeWeight(8);
+			ellipse(0,0,100,100);
+		break;
+		case 48:
+			noFill();
+			stroke(105,250,215,this.fade);
+			strokeWeight(8);
+			ellipse(0,0,100,100);
+		break;
+		case 49:
+			noFill();
+			stroke(255,50,50,this.fade);
+			strokeWeight(8);
+			ellipse(0,0,100,100);
+		break;
+		case 50:
+			noStroke();
+			fill(230,230,50,this.fade);
+			ellipse(0,0,1,1);
+		break;
+		case 51:
+			rotate(-this.direction);
+			fill(200,0,0,this.fade);
+			noStroke();
+			textSize(10+log(this.value));
+			text(amplify(this.value),0,0);
+			rotate(this.direction);
+		break;
+		case 52:
+			noFill();
+			stroke(240,50,50,this.fade);
+			strokeWeight(5);
+			ellipse(0,0,100,100);
+		break;
+		case 53:
+			fill(240,50,50,this.fade);
+			noStroke();
+			beginShape();
+			vertex(1,-20);
+			vertex(-8,3);
+			vertex(1,3);
+			vertex(-1,20);
+			vertex(8,-3);
+			vertex(-1,-3);
+			endShape();
+		break;
+		case 54:
+			noFill();
+			stroke(255,0,150,this.fade);
+			strokeWeight(8);
+			ellipse(0,0,100,100);
+		break;
+		case 55:
+			noStroke();
+			fill(220,255,220,this.fade*2/3);
+			ellipse(0,0,75,75);
+			fill(230,255,230,this.fade*2/3);
+			ellipse(0,0,50,50);
+			fill(240,255,240,this.fade*2/3);
+			ellipse(0,0,25,25);
+		break;
+		case 56:
+			noStroke();
+			fill(150,255,255,this.fade);
+			ellipse(0,0,1,1);
+		break;
+		case 57:
+			noFill();
+			stroke(105,10,255,this.fade);
+			strokeWeight(8);
+			ellipse(0,0,100,100);
+		break;
+		case 58:
+			noStroke();
+			fill(255,this.fade);
+			ellipse(0,0,1,1);
+		break;
+	}
+	scale(1/(this.size*this.size2));
+	rotate(-this.direction);
+	translate(-this.x,-this.y);
+}
+burst.prototype.update = function(){
+	if(this.type === 0||this.type === 2||this.type === 26){
+		this.size2-=0.01;
+		this.fade-=5;
+		this.x+=sin(this.direction)*this.size/20;
+		this.y+=cos(this.direction)*this.size/20;
+	}
+	else if(this.type === 1||this.type === 15||this.type === 25||this.type === 29||this.type === 36||this.type === 42||this.type === 47||this.type === 48||this.type === 49||this.type === 54||this.type === 57){
+		this.size2+=0.02;
+		this.fade-=5;
+	}
+	else if(this.type === 3||this.type === 52){
+		this.size2+=0.03;
+		this.fade-=2;
+	}
+	else if(this.type === 4||this.type === 37){
+		this.size2-=0.005;
+		this.fade-=3;
+		this.x+=sin(this.direction)*this.size/10;
+		this.y+=cos(this.direction)*this.size/10;
+	}
+	else if(this.type === 5||this.type === 14||this.type === 20||this.type === 30||this.type === 53){
+		this.y-=0.5;
+		if(this.up){
+			this.fade-=5;
+			if(this.fade<=0){
+				this.dead = true;
+			}
+		}
+		else{
+			this.fade+=5;
+			if(this.fade>=255){
+				this.up = true;
+			}
+		}
+	}
+	else if(this.type === 6){
+		this.size2+=0.025;
+		this.fade-=10;
+	}
+	else if(this.type === 7||this.type === 27||this.type === 41||this.type === 55){
+		this.size2+=0.05;
+		this.fade-=5;
+	}
+	else if(this.type === 8||this.type === 32||this.type === 39){
+		this.size2-=0.01;
+		this.fade-=5;
+		this.x+=sin(this.direction)*this.size/12;
+		this.y+=cos(this.direction)*this.size/12;
+	}
+	else if(this.type === 9){
+		this.size2+=0.015;
+		this.fade-=5;
+	}
+	else if(this.type === 10||this.type === 58){
+		this.size2-=0.01;
+		this.direction--;
+		this.x+=sin(this.direction)*this.size/20;
+		this.y+=cos(this.direction)*this.size/20;
+		if(this.size2<=0){
+			this.dead = true;
+		}
+	}
+	else if(this.type === 11){
+		this.size2+=0.015;
+		this.fade-=4;
+	}
+	else if(this.type === 12||this.type === 16||this.type === 43||this.type === 44||this.type === 46){
+		this.size2+=0.05;
+		this.fade-=5;
+	}
+	else if(this.type === 13||this.type === 19||this.type === 22||this.type === 31||this.type === 34){
+		this.size2-=0.01;
+		this.fade-=5;
+		this.x+=sin(this.direction)*this.size/8;
+		this.y+=cos(this.direction)*this.size/8;
+	}
+	else if(this.type === 17||this.type === 18){
+		this.fade-=3;
+		this.x+=sin(this.direction)*this.size/2;
+		this.y+=cos(this.direction)*this.size/2;
+	}
+	else if(this.type === 21||this.type === 23||this.type === 33||this.type === 35||this.type === 56){
+		this.size2-=0.01;
+		if(this.up){
+			this.fade-=5;
+			if(this.fade<=0){
+				this.dead = true;
+			}
+		}
+		else{
+			this.fade+=5;
+			if(this.fade>=255){
+				this.up = true;
+			}
+		}
+		this.x+=sin(this.direction)*this.size/20;
+		this.y+=cos(this.direction)*this.size/20;
+	}
+	else if(this.type === 24){
+		this.size2+=0.09;
+		this.fade-=6;
+	}
+	else if(this.type === 28){
+		this.size2+=0.01;
+		this.fade-=0.4;
+	}
+	else if(this.type === 38||this.type === 50){
+		this.size2+=0.25;
+		this.fade-=5;
+	}
+	else if(this.type === 40||this.type === 59){
+		this.size2-=3;
+		this.fade+=14;
+		if(this.fade>260){
+			this.fade = -100;
+		}
+	}
+	else if(this.type === 45){
+		this.size2+=0.025;
+		this.fade-=2;
+	}
+	else if(this.type === 51){
+		if(this.up){
+			this.fade-=5;
+			if(this.fade<=0){
+				this.dead = true;
+			}
+		}
+		else{
+			this.fade+=5;
+			if(this.fade>=255){
+				this.up = true;
+			}
+		}
+		this.x+=sin(this.direction)/2;
+		this.y+=cos(this.direction)/2;
+	}
+}
