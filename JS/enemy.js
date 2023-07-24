@@ -55,6 +55,8 @@ class enemy extends entity{
             attachments:[],
         }
 
+        this.counters={zaps:0}
+
         this.movement=movement
         
         if(this.movement==undefined){
@@ -75,11 +77,24 @@ class enemy extends entity{
                 this.anim.hand=0
                 this.operation={timer:0}
             break
+            case 'Mystery Boss':
+                this.spawns=['Normal Boss','Lead Boss','Fallen Reaper','Chained Boss','Shadow Boss','Boomer','Mega Speedy']
+            break
+            case 'Glitch':
+                this.anim.possibilities=[[200,0,255],[0,100,200],[0,150,255],[255,150,50],[255,75,255],[50,255,50],[125,255,125],[255,255,100],[180,180,180],[255,100,100]]
+            break
         }
         for(let a=0,la=this.attachments.length;a<la;a++){
             switch(this.attachments[a].name){
                 case 'FallenRusherArms': case 'FallenRusherShield':
                     this.anim.attachments.push({main:0})
+                break
+                case 'Leg1Flash': case 'Leg2Flash': case 'Arm1Flash': case 'Arm2Flash': case 'BodyFlash':
+                    this.anim.attachments.push({possibilities:[[200,0,255],[0,100,200],[0,150,255],[255,150,50],[255,75,255],[50,255,50],[125,255,125],[255,255,100],[180,180,180],[255,100,100]]})
+                    this.attachments[a].color=this.anim.attachments[a].possibilities[floor(random(0,this.anim.attachments[a].possibilities.length))]
+                break
+                case 'Shocks':
+                    this.anim.attachments.push({shocks:[[random(0,360),random(15,50),1],[random(0,360),random(15,50),0.8],[random(0,360),random(15,50),0.6],[random(0,360),random(15,50),0.4],[random(0,360),random(15,50),0.2]]})
                 break
                 default:
                     this.anim.attachments.push(0)
@@ -89,17 +104,21 @@ class enemy extends entity{
     }
     takeDamage(damage,typeName){
         if(damage>0){
-            let effect=max(damage-this.defense,min(damage,1))
+            let effect=damage
+            if(this.name=='Lead Boss'&&this.life>this.base.life*0.5&&typeName=='Physical'){
+                effect/=-2
+            }
+            let reEffect=max(damage-this.defense,min(damage,1))
             if(this.shield>0){
-                this.shield-=effect
+                this.shield-=reEffect
             }else{
-                this.life-=damage
+                this.life-=reEffect
             }
         }
     }
     summonPosition(number,variance,possibilities){
         for(let a=0,la=number;a<la;a++){
-            entities.enemies.push(new enemy(this.layer,this.position.x+random(-variance,variance),this.position.y+random(-variance,variance),findName(possibilities[floor(random(0,possibilities.length-1))],types.enemy),this.id,{
+            entities.enemies.push(new enemy(this.layer,this.position.x+random(-variance,variance),this.position.y+random(-variance,variance),findName(possibilities[floor(random(0,possibilities.length))],types.enemy),this.id,{
                 path:this.movement.path,
                 position:this.movement.position,
                 progress:this.movement.progress,
@@ -117,7 +136,7 @@ class enemy extends entity{
                 for(let a=0,la=this.attachments.length;a<la;a++){
                     this.layer.noStroke()
                     switch(this.attachments[a].name){
-                        case 'Body':
+                        case 'Body': case 'BodyFlash':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
                             this.layer.ellipse(0,0,24,24)
                         break
@@ -336,6 +355,56 @@ class enemy extends entity{
                             this.layer.point(-2.5,1.25)
                             this.layer.point(2.5,1.25)
                         break
+                        case 'ArmbandsQuad':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
+                            this.layer.quad(-13,-6,-13,6,-15,6,-15,-6)
+					        this.layer.quad(13,-6,13,6,15,6,15,-6)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
+                        break
+                        case 'LightningImprint':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+        					this.layer.triangle(0,-10,-3,1,1,2)
+		        			this.layer.triangle(0,10,3,-1,-1,-2)
+                        break
+                        case 'Arm1Flash':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
+                            this.layer.ellipse(-15,0,12,12)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
+                        break
+                        case 'Arm2Flash':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
+                            this.layer.ellipse(15,0,12,12)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
+                        break
+                        case 'Leg1Flash':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.ellipse(-5,(lsin(this.rates.main*4))*7,12,12)
+                        break
+                        case 'Leg2Flash':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.ellipse(5,(lsin(this.rates.main*4))*-7,12,12)
+                        break
+                        case 'AngerEyes':
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.strokeWeight(1.5)
+						    this.layer.line(-2.5,1,-5,-0.5)
+						    this.layer.line(2.5,1,5,-0.5)
+                        break
+                        case 'Shocks':
+                            for(let b=0,lb=this.anim.attachments[a].shocks.length;b<lb;b++){
+                                this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*this.anim.attachments[a].shocks[b][2])
+                                this.layer.rotate(this.anim.attachments[a].shocks[b][0])
+                                this.layer.triangle(-3,0,3,0,0,this.anim.attachments[a].shocks[b][1])
+                                this.layer.rotate(-this.anim.attachments[a].shocks[b][0])
+                            }
+                        break
+
+
+
+
 
 
 
@@ -481,6 +550,21 @@ class enemy extends entity{
                     case 'FallenRusherArms': case 'FallenRusherShield':
                         this.anim.attachments[a].main=smoothAnim(this.anim.attachments[a].main,this.life/this.base.life<this.attachments[a].metric,0,1,15)
                     break
+                    case 'Leg1Flash': case 'Leg2Flash': case 'Arm1Flash': case 'Arm2Flash': case 'BodyFlash':
+                        if(floor(random(0,30))==0){
+                            this.attachments[a].color=this.anim.attachments[a].possibilities[floor(random(0,this.anim.attachments[a].possibilities.length))]
+                        }
+                    break
+                    case 'Shocks':
+                        for(let b=0,lb=this.anim.attachments[a].shocks.length;b<lb;b++){
+                            this.anim.attachments[a].shocks[b][2]-=0.04
+                            if(this.anim.attachments[a].shocks[b][2]<=0){
+                                this.anim.attachments[a].shocks[b][2]=1
+                                this.anim.attachments[a].shocks[b][0]=random(0,360)
+                                this.anim.attachments[a].shocks[b][1]=random(15,50)
+                            }
+                        }
+                    break
                 }
             }
             switch(this.name){
@@ -491,6 +575,25 @@ class enemy extends entity{
                 break
                 case 'Fallen Rusher':
                     this.speed=this.recall.speed*(this.life<this.base.life*0.875?1/3:1)
+                break
+                case 'Glitch':
+                    if(this.time%15==0){
+                        entities.particles.push(new particle(this.layer,this.position.x,this.position.y,1,this.anim.possibilities[floor(random(0,this.anim.possibilities.length))],this.size,random(0,360)))
+                    }
+                    if(this.time%60==1&&this.size<1.4){
+                        this.size*=1.4
+                    }
+                    else if(this.time%60==5&&this.size>1){
+                        this.size/=1.4
+                        for(let a=0,la=8;a<la;a++){
+                            entities.particles.push(new particle(this.layer,this.position.x,this.position.y,1,this.anim.possibilities[floor(random(0,this.anim.possibilities.length))],this.size*random(0.8,1.2),random(0,360)))
+                        }
+                    }
+                break
+                case 'Circuit':
+                    if(this.time%5==0){
+                        entities.particles.push(new particle(this.layer,this.position.x,this.position.y,1,[0,205,255],this.size,random(0,360)))
+                    }
                 break
             }
             switch(this.name){
@@ -508,12 +611,39 @@ class enemy extends entity{
                         this.anim.hand=0
                     }
                 break
+                case 'Mega Speedy':
+                    if(this.time%150==75){
+                        this.speed=this.recall.speed*3
+                        let direction=random(0,360/7)
+                        for(let a=0,la=7;a<la;a++){
+                            entities.particles.push(new particle(this.layer,this.position.x,this.position.y,1,[85,85,85],this.size,direction+a*360/7))
+                        }
+                    }
+                    else if(this.speed>this.recall.speed){
+                        this.speed-=1/10
+                    }
+                break
+                case 'Circuit':
+                    if(this.time%180==150){
+                        entities.particles.push(new particle(this.layer,this.position.x,this.position.y,3,[105,255,255],20,0))
+                        for(let a=0,la=entities.enemies.length;a<la;a++){
+    						if(entities.enemies[a].life<=10000){
+                                entities.enemies[a].speed*=1.2
+                                entities.enemies[a].recall.speed*=1.2
+                                entities.enemies[a].counters.zaps++
+                                for(let b=0,lb=entities.enemies[a].counters.zaps;b<lb;b++){
+                                    entities.particles.push(new particle(this.layer,entities.enemies[a].position.x+b*12-entities.enemies[a].counters.zaps*6+6,entities.enemies[a].position.y,4,[105,255,255],1,0))
+                                }
+                            }
+                        }
+                    }
+                break
             }
         }else{
             if(!this.trigger.death){
                 switch(this.name){
-                    case 'Mystery':
-                        entities.enemies.push(new enemy(this.layer,this.position.x,this.position.y,findName(this.spawns[floor(random(0,this.spawns.length-1))],types.enemy),this.id,{
+                    case 'Mystery': case 'Mystery Boss':
+                        entities.enemies.push(new enemy(this.layer,this.position.x,this.position.y,findName(this.spawns[floor(random(0,this.spawns.length))],types.enemy),this.id,{
                             path:this.movement.path,
                             position:this.movement.position,
                             progress:this.movement.progress,

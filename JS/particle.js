@@ -9,9 +9,14 @@ class particle extends entity{
                 this.scale=1
                 this.fade=1
             break
-            case 2:
+            case 2: case 3:
                 this.scale=0
                 this.fade=1
+            break
+            case 4:
+                this.fade=0
+                this.scale=1
+                this.trigger=false
             break
         }
     }
@@ -32,6 +37,24 @@ class particle extends entity{
                 this.layer.noFill()
                 this.layer.ellipse(0,0,10,10)
             break
+            case 3:
+                this.layer.stroke(this.color[0],this.color[1],this.color[2],this.fade)
+                this.layer.strokeWeight(0.4)
+                this.layer.noFill()
+                this.layer.ellipse(0,0,10,10)
+            break
+            case 4:
+                this.layer.fill(0,205,255,this.fade)
+                this.layer.noStroke()
+                this.layer.beginShape()
+                this.layer.vertex(0.5,-10)
+                this.layer.vertex(-4,1.5)
+                this.layer.vertex(0.5,1.5)
+                this.layer.vertex(-0.5,10)
+                this.layer.vertex(4,-1.5)
+                this.layer.vertex(-0.5,-1.5)
+                this.layer.endShape()
+            break;
         }
         this.layer.pop()
     }
@@ -43,10 +66,30 @@ class particle extends entity{
                 this.fade-=1/30
                 this.position.x+=lsin(this.direction)*this.size
                 this.position.y+=lcos(this.direction)*this.size
+                if(this.fade<=0){
+                    this.remove=true
+                }
             break
-            case 2:
+            case 2: case 3:
                 this.scale+=1/60
                 this.fade-=1/60
+                if(this.fade<=0){
+                    this.remove=true
+                }
+            break
+            case 4:
+                this.position.y--
+                if(this.trigger){
+                    this.fade-=1/30
+                    if(this.fade<=0){
+                        this.remove=true
+                    }
+                }else{
+                    this.fade+=1/30
+                    if(this.fade>=1){
+                        this.trigger=true
+                    }
+                }
             break
         }
     }
