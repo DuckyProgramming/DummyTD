@@ -18,6 +18,8 @@ class enemy extends entity{
         this.attachments=types.enemy[this.type].attachments
         
         this.direction=0
+        this.activated=true
+        this.shieldLevel=0
 
         this.offset={
             position:{x:0,y:0},
@@ -52,6 +54,7 @@ class enemy extends entity{
         this.anim={
             life:1,
             size:1,
+            direction:0,
             attachments:[],
         }
 
@@ -83,6 +86,10 @@ class enemy extends entity{
             case 'Glitch':
                 this.anim.possibilities=[[200,0,255],[0,100,200],[0,150,255],[255,150,50],[255,75,255],[50,255,50],[125,255,125],[255,255,100],[180,180,180],[255,100,100]]
             break
+            case 'Templar':
+                this.shieldLevel=10
+                this.operation={timer:0}
+            break
         }
         for(let a=0,la=this.attachments.length;a<la;a++){
             switch(this.attachments[a].name){
@@ -96,6 +103,15 @@ class enemy extends entity{
                 case 'Shocks':
                     this.anim.attachments.push({shocks:[[random(0,360),random(15,50),1],[random(0,360),random(15,50),0.8],[random(0,360),random(15,50),0.6],[random(0,360),random(15,50),0.4],[random(0,360),random(15,50),0.2]]})
                 break
+                case 'LeadBalloon':
+                    this.anim.attachments.push({direction:[0,120,240],radius:24,state:0})
+                break
+                case 'TemplarShield':
+                    this.anim.attachments.push({main:0})
+                break
+                case 'SlowKingShield':
+                    this.anim.attachments.push({main:1})
+                break
                 default:
                     this.anim.attachments.push(0)
                 break
@@ -105,10 +121,15 @@ class enemy extends entity{
     takeDamage(damage,typeName){
         if(damage>0){
             let effect=damage
-            if(this.name=='Lead Boss'&&this.life>this.base.life*0.5&&typeName=='Physical'){
-                effect/=-2
+            if(typeName=='Physical'&&
+                (this.name=='Lead Boss')&&this.life>this.base.life*0.5||
+                (this.name=='Lead Balloon')&&this.life>this.base.life*0.25){
+                effect*=0.5
             }
             let reEffect=max(damage-this.defense,min(damage,1))
+            if(this.shieldLevel>0&&this.activated){
+                reEffect=min(reEffect,this.shieldLevel)
+            }
             if(this.shield>0){
                 this.shield-=reEffect
             }else{
@@ -129,7 +150,7 @@ class enemy extends entity{
     display(){
         this.layer.push()
         this.layer.translate(this.position.x+this.offset.position.x,this.position.y+this.offset.position.x)
-        this.layer.rotate(this.direction)
+        this.layer.rotate(this.direction+this.anim.direction)
         this.layer.scale(this.size)
         switch(this.type){
             default:
@@ -401,6 +422,135 @@ class enemy extends entity{
                                 this.layer.rotate(-this.anim.attachments[a].shocks[b][0])
                             }
                         break
+                        case 'LeadBalloon':
+                            this.layer.stroke(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade)
+                            this.layer.strokeWeight(2)
+                            for(let b=0,lb=3-this.anim.attachments[a].state;b<lb;b++){
+                				this.layer.line(0,0,lsin(this.anim.attachments[a].direction[b]+this.time+this.direction)*this.anim.attachments[a].radius,lcos(this.anim.attachments[a].direction[b]+this.time+this.direction)*this.anim.attachments[a].radius)
+                            }
+                            this.layer.fill(this.attachments[a].color[1][0],this.attachments[a].color[1][1],this.attachments[a].color[1][2],this.fade)
+                            this.layer.noStroke()
+                            for(let b=0,lb=3-this.anim.attachments[a].state;b<lb;b++){
+                				this.layer.ellipse(lsin(this.anim.attachments[a].direction[b]+this.time+this.direction)*this.anim.attachments[a].radius,lcos(this.anim.attachments[a].direction[b]+this.time+this.direction)*this.anim.attachments[a].radius,20,20)
+                            }
+                            this.layer.fill(this.attachments[a].color[2][0],this.attachments[a].color[2][1],this.attachments[a].color[2][2],this.fade)
+                            for(let b=0,lb=3-this.anim.attachments[a].state;b<lb;b++){
+                                this.layer.push()
+                				this.layer.translate(lsin(this.anim.attachments[a].direction[b]+this.time+this.direction)*this.anim.attachments[a].radius,lcos(this.anim.attachments[a].direction[b]+this.time+this.direction)*this.anim.attachments[a].radius)
+                                this.layer.rotate(a*60+this.direction)
+                                this.layer.ellipse(0,0,7,2)
+                                this.layer.ellipse(-6.5,0,2,7)
+                                this.layer.ellipse(6.5,0,2,7)
+                                this.layer.ellipse(0,6.5,2,7)
+                                this.layer.ellipse(0,-6.5,2,7)
+                                this.layer.arc(-6.5,-6.5,7,2,-90,150)
+                                this.layer.arc(-6.5,6.5,7,2,-150,90)
+                                this.layer.arc(6.5,-6.5,7,2,30,270)
+                                this.layer.arc(6.5,6.5,7,2,90,330)
+                                this.layer.pop()
+                            }
+                        break
+                        case 'TemplarGun':
+                            this.layer.fill(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade)
+                            this.layer.rect(-2,18,6,18)
+                            this.layer.fill(this.attachments[a].color[1][0],this.attachments[a].color[1][1],this.attachments[a].color[1][2],this.fade)
+                            this.layer.rect(-2,18,10,16)
+                            this.layer.fill(this.attachments[a].color[2][0],this.attachments[a].color[2][1],this.attachments[a].color[2][2],this.fade)
+                            this.layer.rect(-5,18,4,20,2)
+                            this.layer.rect(1,18,4,20,2)
+                        break
+                        case 'TemplarArms':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
+                            this.layer.ellipse(15,0,12,12)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
+                            this.layer.ellipse(-8,11,12,12)
+                        break
+                        case 'TemplarArmBands':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
+                            this.layer.quad(13,-6,13,6,16,6.5,16,-6.5)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
+                            this.layer.quad(-2,9,-14,9,-14.5,12,-1.5,12)
+                        break
+                        case 'TemplarVisor':
+                            this.layer.stroke(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade)
+                            this.layer.fill(this.attachments[a].color[1][0],this.attachments[a].color[1][1],this.attachments[a].color[1][2],this.fade)
+                            this.layer.strokeWeight(1.5)
+			                this.layer.rect(0,1,12,4.5,2)
+                        break
+                        case 'TemplarShield':
+                            this.layer.rotate(this.time*1.5)
+                            this.layer.stroke(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade*this.anim.attachments[a].main)
+                            this.layer.strokeWeight(6)
+                            this.layer.noFill()
+                            for(let a=0,la=4;a<la;a++){
+                                this.layer.arc(0,0,48,48,-30+a*90,30+a*90)
+                            }
+                            this.layer.stroke(125,105,0,this.fade*this.anim.shield)
+                            this.layer.strokeWeight(1)
+                            this.layer.rotate(16)
+                            if(this.life>0){
+                                for(let a=0,la=4;a<la;a++){
+                                    this.layer.rotate(58)
+                                    this.layer.line(-2,22,-2,26)
+                                    this.layer.ellipse(1,24,2,4)
+                                    this.layer.rotate(32)
+                                    this.layer.line(-2,22,-2,26)
+                                    this.layer.ellipse(1,24,2,4)
+                                }
+                            }
+                            else{
+                                for(let a=0,la=4;a<la;a++){
+                                    this.layer.rotate(58)
+                                    this.layer.line(-2,22,-2,26)
+                                    this.layer.line(-2,22,2,22)
+                                    this.layer.line(-2,24,2,24)
+                                    this.layer.line(-2,26,2,26)
+                                    this.layer.rotate(32)
+                                    this.layer.line(-2,22,-2,26)
+                                    this.layer.line(-2,22,2,22)
+                                    this.layer.line(-2,24,2,24)
+                                    this.layer.line(-2,26,2,26)
+                                }
+                            }
+                        break
+                        case 'SlowKingCape':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.triangle(-7,0,7,0,0,-20)
+                            this.layer.triangle(-7,1,7,-1,-6,-19)
+                            this.layer.triangle(7,1,-7,-1,6,-19)
+                            this.layer.triangle(-7,2,7,-2,-11,-17)
+                            this.layer.triangle(7,2,-7,-2,11,-17)
+                        break
+                        case 'SlowKingArmbands':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
+                            this.layer.rect(-15,0,3,12)
+                            this.layer.rect(15,0,3,12)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
+                        break
+                        case 'SlowKingTumor':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.ellipse(-6,-10,8,8)
+                            this.layer.ellipse(-2,-11,6,6)
+                            this.layer.ellipse(-9,-7,5,5)
+                        break
+                        case 'SlowKingShield':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*this.anim.attachments[a].main*0.4)
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*this.anim.attachments[a].main)
+                            this.layer.strokeWeight(3)
+                            this.layer.beginShape()
+                            for(let a=0,la=7;a<la;a++){
+                                this.layer.vertex(lsin(a*360/7+this.time)*24,lcos(a*360/7+this.time)*24)
+                            }
+                            this.layer.endShape(CLOSE)
+                            this.layer.beginShape()
+                            for(let a=0,la=7;a<la;a++){
+                                this.layer.vertex(lsin(a*360/7-this.time)*30,lcos(a*360/7-this.time)*30)
+                            }
+                            this.layer.endShape(CLOSE)
+                        break
 
 
 
@@ -471,20 +621,20 @@ class enemy extends entity{
             switch(this.name){
                 default:
                     this.layer.translate(0,-10)
-                    this.layer.fill(150,this.fade*this.anim.shield)
+                    this.layer.fill(150,this.fade*this.anim.life)
                     this.layer.rect(0,0,40,6,3)
                     if(this.collect.shield>=this.shield){
                         this.layer.fill(240,0,0,this.fade*this.anim.shield)
                         this.layer.rect((max(0,this.collect.shield)/this.base.shield)*20-20,0,(max(0,this.collect.shield)/this.base.shield)*40,2+min((max(0,this.collect.shield)/this.base.shield)*80,4),3)
-                        this.layer.fill(0,min(255,510-max(0,this.shield)/this.base.shield*510)-max(0,5-max(0,this.shield)/this.base.shield*30)*25,max(0,this.shield)/this.base.shield*510,this.fade*this.anim.shield)
+                        this.layer.fill(0,min(355,610-max(0,this.shield)/this.base.shield*510)-max(0,5-max(0,this.shield)/this.base.shield*30)*25,max(0,this.shield)/this.base.shield*510,this.fade*this.anim.life)
                         this.layer.rect((max(0,this.shield)/this.base.shield)*20-20,0,(max(0,this.shield)/this.base.shield)*40,2+min((max(0,this.shield)/this.base.shield)*80,4),3)
                     }else if(this.collect.shield<this.shield){
                         this.layer.fill(240,0,0,this.fade*this.anim.shield)
                         this.layer.rect((max(0,this.shield)/this.base.shield)*20-20,0,(max(0,this.shield)/this.base.shield)*40,2+min((max(0,this.shield)/this.base.shield)*80,4),3)
-                        this.layer.fill(0,min(255,510-max(0,this.collect.shield)/this.base.shield*510)-max(0,5-max(0,this.collect.shield)/this.base.shield*30)*25,max(0,this.collect.shield)/this.base.shield*510,this.fade*this.anim.shield)
+                        this.layer.fill(0,min(355,610-max(0,this.collect.shield)/this.base.shield*510)-max(0,5-max(0,this.collect.shield)/this.base.shield*30)*25,max(0,this.collect.shield)/this.base.shield*510,this.fade*this.anim.life)
                         this.layer.rect((max(0,this.collect.shield)/this.base.shield)*20-20,0,(max(0,this.collect.shield)/this.base.shield)*40,2+min((max(0,this.collect.shield)/this.base.shield)*80,4),3)
                     }
-                    this.layer.fill(0,this.fade*this.anim.shield)
+                    this.layer.fill(0,this.fade*this.anim.life)
                     this.layer.textSize(6)
                     this.layer.text(max(0,ceil(convert(this.shield)))+"/"+max(0,ceil(convert(this.base.shield))),0,0.5)
                 break
@@ -565,6 +715,31 @@ class enemy extends entity{
                             }
                         }
                     break
+                    case 'LeadBalloon':
+                        if(this.life<=this.base.life*(0.75-this.anim.attachments[a].state*0.25)){
+                            entities.particles.push(new particle(this.layer,
+                                this.position.x+lsin(this.time+this.anim.attachments[a].direction[2-this.anim.attachments[a].state])*this.anim.attachments[a].radius,
+                                this.position.y+lcos(this.time+this.anim.attachments[a].direction[2-this.anim.attachments[a].state])*this.anim.attachments[a].radius,
+                                5,[0,0,0],5,0))
+                            this.anim.attachments[a].state++
+                        }
+                        if(this.anim.attachments[a].radius>[24,20,8,0][this.anim.attachments[a].state]){
+                            this.anim.attachments[a].radius--
+                        }
+                        for(let b=0,lb=3-this.anim.attachments[a].state;b<lb;b++){
+                            if(this.anim.attachments[a].direction[b]>360*b/lb+5){
+                                this.anim.attachments[a].direction[b]-=5
+                            }else if(this.anim.attachments[a].direction[b]<360*b/lb-5){
+                                this.anim.attachments[a].direction[b]+=5
+                            }
+                        }
+                    break
+                    case 'TemplarShield':
+                        this.anim.attachments[a].main=smoothAnim(this.anim.attachments[a].main,this.activated,0,1,5)
+                    break
+                    case 'SlowKingShield':
+                        this.anim.attachments[a].main=smoothAnim(this.anim.attachments[a].main,this.shield>0,0,1,5)
+                    break
                 }
             }
             switch(this.name){
@@ -596,48 +771,50 @@ class enemy extends entity{
                     }
                 break
             }
-            switch(this.name){
-                case 'Fallen Reaper':
-                    this.operation.timer++
-                    if(this.operation.timer%510<60){
-                        this.anim.hand+=this.operation.timer%510<=30?0.35:-0.35
-                        this.speed=0
-                        if(this.operation.timer%510==30){
-                            this.summonPosition(floor(random(2,4)),30,this.spawns)
+            if(this.activated){
+                switch(this.name){
+                    case 'Fallen Reaper':
+                        this.operation.timer++
+                        if(this.operation.timer%510<60){
+                            this.anim.hand+=this.operation.timer%510<=30?0.35:-0.35
+                            this.speed=0
+                            if(this.operation.timer%510==30){
+                                this.summonPosition(floor(random(2,4)),30,this.spawns)
+                            }
                         }
-                    }
-                    else{
-                        this.speed=this.recall.speed
-                        this.anim.hand=0
-                    }
-                break
-                case 'Mega Speedy':
-                    if(this.time%150==75){
-                        this.speed=this.recall.speed*3
-                        let direction=random(0,360/7)
-                        for(let a=0,la=7;a<la;a++){
-                            entities.particles.push(new particle(this.layer,this.position.x,this.position.y,1,[85,85,85],this.size,direction+a*360/7))
+                        else{
+                            this.speed=this.recall.speed
+                            this.anim.hand=0
                         }
-                    }
-                    else if(this.speed>this.recall.speed){
-                        this.speed-=1/10
-                    }
-                break
-                case 'Circuit':
-                    if(this.time%180==150){
-                        entities.particles.push(new particle(this.layer,this.position.x,this.position.y,3,[105,255,255],20,0))
-                        for(let a=0,la=entities.enemies.length;a<la;a++){
-    						if(entities.enemies[a].life<=10000){
-                                entities.enemies[a].speed*=1.2
-                                entities.enemies[a].recall.speed*=1.2
-                                entities.enemies[a].counters.zaps++
-                                for(let b=0,lb=entities.enemies[a].counters.zaps;b<lb;b++){
-                                    entities.particles.push(new particle(this.layer,entities.enemies[a].position.x+b*12-entities.enemies[a].counters.zaps*6+6,entities.enemies[a].position.y,4,[105,255,255],1,0))
+                    break
+                    case 'Mega Speedy':
+                        if(this.time%150==75){
+                            this.speed=this.recall.speed*3
+                            let direction=random(0,360/7)
+                            for(let a=0,la=7;a<la;a++){
+                                entities.particles.push(new particle(this.layer,this.position.x,this.position.y,1,[85,85,85],this.size,direction+a*360/7))
+                            }
+                        }
+                        else if(this.speed>this.recall.speed){
+                            this.speed-=1/10
+                        }
+                    break
+                    case 'Circuit':
+                        if(this.time%180==150){
+                            entities.particles.push(new particle(this.layer,this.position.x,this.position.y,3,[105,255,255],20,0))
+                            for(let a=0,la=entities.enemies.length;a<la;a++){
+                                if(entities.enemies[a].life<=10000){
+                                    entities.enemies[a].speed*=1.2
+                                    entities.enemies[a].recall.speed*=1.2
+                                    entities.enemies[a].counters.zaps++
+                                    for(let b=0,lb=entities.enemies[a].counters.zaps;b<lb;b++){
+                                        entities.particles.push(new particle(this.layer,entities.enemies[a].position.x+b*12-entities.enemies[a].counters.zaps*6+6,entities.enemies[a].position.y,4,[105,255,255],1,0))
+                                    }
                                 }
                             }
                         }
-                    }
-                break
+                    break
+                }
             }
         }else{
             if(!this.trigger.death){

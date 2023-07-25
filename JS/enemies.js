@@ -254,5 +254,102 @@ types.enemy=[
             {name:'AngerEyes',color:[105,255,255]},
             {name:'Eyes',color:[105,255,255]},
         ],
+    },{
+        name:'Lead Balloon',
+        life:320,shield:0,defense:0,
+        speed:2,stun:0.75,
+		size:1,hidden:false,
+        multi:2,
+		attachments:[
+            {name:'Legs',color:[120,50,10]},
+            {name:'Arms',color:[150,60,15]},
+            {name:'Body',color:[35,120,35]},
+            {name:'Mouth',color:[0,0,0]},
+            {name:'Eyes',color:[0,0,0]},
+            {name:'LeadBalloon',color:[[100,100,100],[120,120,120],[60,60,60]]},
+        ],
+    },{
+        name:'Templar',
+        life:5000,shield:0,defense:0,
+        speed:0.85,stun:0.25,
+		size:1.5,hidden:false,
+        multi:4,
+		attachments:[
+            {name:'Legs',color:[130,130,130]},
+            {name:'TemplarGun',color:[[255,0,0],[10,10,10],[30,30,30]]},
+            {name:'TemplarArms',color:[160,160,160]},
+            {name:'TemplarArmBands',color:[80,80,80]},
+            {name:'Body',color:[160,160,160]},
+            {name:'Mouth',color:[0,0,0]},
+            {name:'TemplarVisor',color:[[0,0,0],[255,0,0]]},
+            {name:'TemplarShield',color:[[255,215,0],[125,105,0]]},
+        ],
+    },{
+        name:'Slow King',
+        life:4000,shield:1000,defense:0,
+        speed:0.65,stun:0.25,
+		size:1.55,hidden:false,
+        multi:1.25,
+		attachments:[
+            {name:'Legs',color:[20,20,20]},
+            {name:'SlowKingCape',color:[15,15,15]},
+            {name:'Arms',color:[20,75,20]},
+            {name:'SlowKingArmbands',color:[25,25,25]},
+            {name:'Body',color:[20,75,20]},
+            {name:'SlowKingTumor',color:[20,75,20]},
+            {name:'Mouth',color:[0,0,0]},
+            {name:'Eyes',color:[180,20,120]},
+            {name:'SlowKingShield',color:[180,20,120]},
+        ],
+    },{
+        name:'Soul',
+        life:800,shield:0,defense:0,
+        speed:1.45,stun:0.5,
+		size:1,hidden:true,
+        multi:1,
+		attachments:[
+            {name:'Legs-Transparent',color:[120,120,120,0.2]},
+            {name:'Arms-Transparent',color:[255,255,255,0.6]},
+            {name:'Body-Transparent',color:[255,255,255,0.6]},
+            {name:'Mouth',color:[120,120,120]},
+            {name:'Eyes',color:[120,120,120]},
+        ],
     },
+    
+    
+    
+    
+    /*{
+        name:'Mystery',
+        life:20,shield:0,defense:0,
+        speed:1.1,stun:1,
+		size:1,hidden:false,
+        multi:2,
+		attachments:[
+            {name:'Legs-Transparent',color:[0,100,0,0.2]},
+            {name:'Arms-Transparent',color:[0,200,0,0.6]},
+            {name:'Body-Transparent',color:[0,200,0,0.6]},
+            {name:'Mouth-Transparent',color:[255,255,255,0.4]},
+            {name:'Eyes-Transparent',color:[255,255,255,0.4]},
+            {name:'Question-Transparent',color:[255,255,255,0.8]},
+        ],
+    },*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ]

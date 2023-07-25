@@ -9,7 +9,7 @@ class particle extends entity{
                 this.scale=1
                 this.fade=1
             break
-            case 2: case 3:
+            case 2: case 3: case 5:
                 this.scale=0
                 this.fade=1
             break
@@ -31,7 +31,7 @@ class particle extends entity{
                 this.layer.fill(this.color[0],this.color[1],this.color[2],this.fade)
                 this.layer.ellipse(0,0,10,10)
             break
-            case 2:
+            case 2: case 5:
                 this.layer.stroke(this.color[0],this.color[1],this.color[2],this.fade)
                 this.layer.strokeWeight(0.8)
                 this.layer.noFill()
@@ -54,7 +54,7 @@ class particle extends entity{
                 this.layer.vertex(4,-1.5)
                 this.layer.vertex(-0.5,-1.5)
                 this.layer.endShape()
-            break;
+            break
         }
         this.layer.pop()
     }
@@ -91,6 +91,14 @@ class particle extends entity{
                     }
                 }
             break
+            case 5:
+                this.scale+=1/15
+                this.fade-=1/15
+                if(this.fade<=0){
+                    this.remove=true
+                }
+            break
+
         }
     }
 }
