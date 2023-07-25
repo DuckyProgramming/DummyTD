@@ -23,6 +23,15 @@ function displayTransition(layer,transition){
 		transition.anim=round(transition.anim*10-1)/10
 	}
 }
+function directionValue(start,target,bound){
+	if(abs(target-start)<bound||abs(target-start-360)<bound||abs(target-start+360)<bound||abs(target-start-720)<bound||abs(target-start+720)<bound){
+		return 0
+	}else if(start>target-180&&start<target||start>target-540&&start<target-360||start>target+180&&start<target+360||start>target-900&&start<target-720||start>target+540&&start<target+720){
+		return 1
+	}else if(start>target&&start<target+180||start>target-360&&start<target-180||start>target+360&&start<target+540||start>target-720&&start<target-540||start>target+720&&start<target+900){
+		return 2
+	}
+}
 function findName(name,list){
 	for(let a=0,la=list.length;a<la;a++){
 		if(list[a].name==name){

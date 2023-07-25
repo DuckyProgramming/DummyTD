@@ -314,42 +314,108 @@ types.enemy=[
             {name:'Mouth',color:[120,120,120]},
             {name:'Eyes',color:[120,120,120]},
         ],
-    },
-    
-    
-    
-    
-    /*{
-        name:'Mystery',
-        life:20,shield:0,defense:0,
-        speed:1.1,stun:1,
+    },{
+        name:'Soul Boss',
+        life:3500,shield:0,defense:0,
+        speed:0.95,stun:0.15,
+		size:1.5,hidden:true,
+        multi:1,
+		attachments:[
+            {name:'Legs-Transparent',color:[120,120,120,0.2]},
+            {name:'Arms-Transparent',color:[255,255,255,0.6]},
+            {name:'Wings-Transparent',color:[255,255,255,0.4]},
+            {name:'Body-Transparent',color:[255,255,255,0.6]},
+            {name:'Mouth',color:[120,120,120]},
+            {name:'Eyes',color:[120,120,120]},
+            {name:'Halo',color:[255,255,35]},
+        ],
+    },{
+        name:'Health Cultist',
+        life:6000,shield:0,defense:4,
+        speed:1.2,stun:0.25,
 		size:1,hidden:false,
         multi:2,
 		attachments:[
-            {name:'Legs-Transparent',color:[0,100,0,0.2]},
-            {name:'Arms-Transparent',color:[0,200,0,0.6]},
-            {name:'Body-Transparent',color:[0,200,0,0.6]},
-            {name:'Mouth-Transparent',color:[255,255,255,0.4]},
-            {name:'Eyes-Transparent',color:[255,255,255,0.4]},
-            {name:'Question-Transparent',color:[255,255,255,0.8]},
+            {name:'Legs',color:[45,160,45]},
+            {name:'Arms',color:[50,175,50]},
+            {name:'Body',color:[60,210,60]},
+            {name:'Mouth',color:[0,0,0]},
+            {name:'Eyes',color:[0,0,0]},
+            {name:'CloakClasp',color:[55,190,55]},
+            {name:'HealthCultistLines',color:[100,255,100]},
+            {name:'HealthCultistLoop-Transparent',color:[70,240,70]},
+        ],
+    },{
+        name:'SCT',
+        life:6666,shield:0,defense:0,
+        speed:1.875,stun:0.15,
+		size:1,hidden:false,
+        multi:1.25,
+		attachments:[
+            {name:'Gun',color:[40,40,40]},
+            {name:'Legs',color:[0,25,0]},
+            {name:'FallenGunArms',color:[0,30,0]},
+            {name:'GunArmBands',color:[10,10,10]},
+            {name:'FallenBody',color:[0,35,0]},
+            {name:'Mouth',color:[0,0,0]},
+            {name:'Sunglasses',color:[0,0,0]},
+        ],
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*{
+        name:'',
+        life:0,shield:0,defense:0,
+        speed:1,stun:1,
+		size:1,hidden:false,
+        multi:1,
+		attachments:[
+            {name:'Legs',color:[0,0,0]},
+            {name:'Arms',color:[0,0,0]},
+            {name:'Body',color:[0,0,0]},
+            {name:'Mouth',color:[0,0,0]},
+            {name:'Eyes',color:[0,0,0]},
+        ],
+    },{
+        name:'Normal',
+        life:5,shield:0,defense:0,
+        speed:1,stun:1,
+		size:1,hidden:false,
+        multi:1,
+		attachments:[
+            {name:'Legs',color:[120,60,0]},
+            {name:'Arms',color:[100,200,100]},
+            {name:'Body',color:[100,200,100]},
+            {name:'Mouth',color:[0,0,0]},
+            {name:'Eyes',color:[0,0,0]},
+        ],
+    },{
+        name:'Fallen',
+        life:122,shield:0,defense:0,
+        speed:1.5,stun:0.75,
+		size:1,hidden:false,
+        multi:1,
+		attachments:[
+            {name:'Legs',color:[0,30,45]},
+            {name:'FallenArms',color:[0,40,60]},
+            {name:'FallenBody',color:[0,40,60]},
+            {name:'Mouth',color:[0,0,0]},
+            {name:'Eyes',color:[0,0,0]},
         ],
     },*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ]

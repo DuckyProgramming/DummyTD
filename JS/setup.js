@@ -9,7 +9,7 @@ function setup(){
     game.speed=1
     entities.ui=new ui(graphics.main)
 
-    run={fore:[entities.particles,entities.towers,entities.enemies],info:[entities.towers,entities.enemies]}
+    run={fore:[entities.particles,entities.projectiles,entities.towers,entities.enemies],info:[entities.towers,entities.enemies]}
 }
 function windowResized(){
     resizeCanvas(windowWidth-50,windowHeight-50)

@@ -90,6 +90,9 @@ class enemy extends entity{
                 this.shieldLevel=10
                 this.operation={timer:0}
             break
+            case 'SCT':
+                this.operation={timer:0,step:0,target:{x:0,y:0}}
+            break
         }
         for(let a=0,la=this.attachments.length;a<la;a++){
             switch(this.attachments[a].name){
@@ -137,6 +140,9 @@ class enemy extends entity{
             }
         }
     }
+    heal(effect){
+        this.life=min(this.life+effect,this.base.life)
+    }
     summonPosition(number,variance,possibilities){
         for(let a=0,la=number;a<la;a++){
             entities.enemies.push(new enemy(this.layer,this.position.x+random(-variance,variance),this.position.y+random(-variance,variance),findName(possibilities[floor(random(0,possibilities.length))],types.enemy),this.id,{
@@ -156,6 +162,7 @@ class enemy extends entity{
             default:
                 for(let a=0,la=this.attachments.length;a<la;a++){
                     this.layer.noStroke()
+                    this.layer.noFill()
                     switch(this.attachments[a].name){
                         case 'Body': case 'BodyFlash':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
@@ -323,7 +330,6 @@ class enemy extends entity{
                         case 'Chained':
                             this.layer.rotate(30)
                             this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
-                            this.layer.noFill()
                             this.layer.strokeWeight(1)
                             this.layer.ellipse(6,9,3,3)
                             this.layer.ellipse(5.4,6,3,3)
@@ -483,7 +489,6 @@ class enemy extends entity{
                             this.layer.rotate(this.time*1.5)
                             this.layer.stroke(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade*this.anim.attachments[a].main)
                             this.layer.strokeWeight(6)
-                            this.layer.noFill()
                             for(let a=0,la=4;a<la;a++){
                                 this.layer.arc(0,0,48,48,-30+a*90,30+a*90)
                             }
@@ -551,6 +556,79 @@ class enemy extends entity{
                             }
                             this.layer.endShape(CLOSE)
                         break
+                        case 'Wings-Transparent':
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*this.attachments[a].color[3])
+                            this.layer.strokeWeight(2.5)
+                            this.layer.arc(-11,-16,12,34,95,160)
+                            this.layer.arc(-9.5,-18,9,30,95,160)
+                            this.layer.arc(-8,-20,6,26,95,160)
+                            this.layer.arc(11,-16,12,34,20,85)
+                            this.layer.arc(9.5,-18,9,30,20,85)
+                            this.layer.arc(8,-20,6,26,20,85)
+                        break
+                        case 'Halo':
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.strokeWeight(2.5)
+                            this.layer.ellipse(0,-12,18,6)
+                        break
+                        case 'CloakClasp':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.arc(0,0,26,26,-210,30)
+                            this.layer.rect(0,1,16,2)
+                        break
+                        case 'HealthCultistLines':
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.strokeWeight(1)
+                            this.layer.arc(-20,18,40,40,-72,-18)
+                            this.layer.arc(-20,18,53,53,-72,-18)
+                            this.layer.arc(-20,18,66,66,-66,-24)
+                        break
+                        case 'HealthCultistLoop-Transparent':
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*this.attachments[a].color[3])
+                            this.layer.strokeWeight(3)
+                            this.layer.arc(0,0,44,44,this.time,80+this.time)
+			                this.layer.arc(0,0,44,44,120+this.time,200+this.time)
+			                this.layer.arc(0,0,44,44,240+this.time,320+this.time)
+			                this.layer.arc(0,0,34,34,70+this.time,130+this.time)
+			                this.layer.arc(0,0,34,34,190+this.time,250+this.time)
+			                this.layer.arc(0,0,34,34,310+this.time,370+this.time)
+                        break
+                        case 'Gun':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.rect(-5,22,4,8,2)
+                        break
+                        case 'FallenGunArms':
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
+                            for(let b=0,lb=5;b<lb;b++){
+                                this.layer.fill(this.attachments[a].color[0]*(0.8+b*0.2),this.attachments[a].color[1]*(0.8+b*0.2),this.attachments[a].color[2]*(0.8+b*0.2),this.fade)
+                                this.layer.ellipse(15,0,12*(1-b/lb),12*(1-b/lb))
+                            }
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
+                            for(let b=0,lb=5;b<lb;b++){
+                                this.layer.fill(this.attachments[a].color[0]*(0.8+b*0.2),this.attachments[a].color[1]*(0.8+b*0.2),this.attachments[a].color[2]*(0.8+b*0.2),this.fade)
+                                this.layer.ellipse(-5,14,12*(1-b/lb),12*(1-b/lb))
+                            }
+                        break
+                        case 'GunArmbands':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
+                            this.layer.rect(15,0,3,12)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
+                            this.layer.rect(-5,14,12,3)
+                        break
+                        case 'Sunglasses':
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.strokeWeight(2)
+                            this.layer.arc(0,-3,25,8,15,165)
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.noStroke()
+                            this.layer.rect(-4,1,5,5,1)
+                            this.layer.rect(4,1,5,5,1)
+                        break
+
+
+
+
 
 
 
@@ -814,6 +892,76 @@ class enemy extends entity{
                             }
                         }
                     break
+                    case 'Health Cultist':
+                        if(this.time%60==0){
+                            for(let a=0,la=entities.enemies.length;a<la;a++){
+                                if(dist(this.position.x,this.position.y,entities.enemies[a].position.x,entities.enemies[a].position.y)<125&&entities.enemies[a].life<=10000){
+                                    entities.enemies[a].heal(500)
+                                    entities.particles.push(new particle(this.layer,this.position.x,this.position.y,6,[80,255,80],1,0))
+                                }
+                            }
+                        }
+                    break
+                    case 'SCT':
+                        switch(this.operation.step){
+                            case 0:
+                                for(let a=0,la=entities.towers.length;a<la;a++){
+                                    if(dist(entities.towers[a].position.x,entities.towers[a].position.y,this.position.x,this.position.y)<200){
+                                        this.operation.step=1
+                                        this.operation.timer=0
+                                        this.operation.target={x:entities.towers[a].position.x,y:entities.towers[a].position.y}
+                                        la=0
+                                    }
+                                }
+                            break
+                            case 1:
+                                let goal=atan2(this.position.x-this.operation.target.x,this.operation.target.y-this.position.y)
+                                let value=directionValue(this.direction+this.anim.direction,goal,3)
+                                switch(value){
+                                    case 0:
+                                        this.anim.direction=goal-this.direction
+                                        this.operation.step=2
+                                    break
+                                    case 1:
+                                        this.anim.direction+=3
+                                    break
+                                    case 2:
+                                        this.anim.direction-=3
+                                    break
+                                }
+                            break
+                            case 2:
+                                this.operation.timer++
+                                if(this.operation.timer==5||this.operation.timer==15||this.operation.timer==25){
+                                    entities.projectiles.push(new projectile(this.layer,
+                                        this.position.x+lcos(this.direction+this.anim.direction)*-5-lsin(this.direction+this.anim.direction)*20,
+                                        this.position.y+lsin(this.direction+this.anim.direction)*-5+lcos(this.direction+this.anim.direction)*20,
+                                        1,0,this.direction+this.anim.direction+180,150,0))
+                                }
+                                if(this.operation.timer==30){
+                                    this.operation.step=3
+                                    this.operation.timer=0
+                                }
+                            break
+                            case 3:
+                                if(abs(this.anim.direction)<3){
+                                    this.anim.direction=0
+                                    this.operation.step=4
+                                }else if(this.anim.direction>0){
+                                    this.anim.direction-=3
+                                }else if(this.anim.direction<0){
+                                    this.anim.direction+=3
+                                }
+                                this.operation.timer++
+                            break
+                            case 4:
+                                this.operation.timer++
+                                if(this.operation.timer==900){
+                                    this.operation.step=0
+                                }
+                            break
+                        }
+                    break
                 }
             }
         }else{
@@ -828,10 +976,19 @@ class enemy extends entity{
                         }))
                     break
                     case 'Boomer':
-                        entities.particles.push(new particle(this.layer,this.position.x,this.position.y,2,[85,165,125],30,0))
+                        entities.particles.push(new particle(this.layer,this.position.x,this.position.y,2,[85,165,125],35,0))
                         for(let a=0,la=entities.towers.length;a<la;a++){
                             if(dist(this.position.x,this.position.y,entities.towers[a].position.x,entities.towers[a].position.y)<140){
                                 entities.towers[a].applyStun(180,0)
+                            }
+                        }
+                    break
+                    case 'Health Cultist':
+                        entities.particles.push(new particle(this.layer,this.position.x,this.position.y,2,[80,255,80],31.25,0))
+                        for(let a=0,la=entities.enemies.length;a<la;a++){
+                            if(dist(this.position.x,this.position.y,entities.enemies[a].position.x,entities.enemies[a].position.y)<125&&entities.enemies[a].life<=10000){
+                                entities.enemies[a].speed*=1.5
+                                entities.enemies[a].recall.speed*=1.5
                             }
                         }
                     break
