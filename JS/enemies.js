@@ -376,6 +376,37 @@ types.enemy=[
             {name:'Cloak',color:[20,0,40]},
             {name:'Horns',color:[200,50,150]},
         ],
+    },{
+        name:'Summoner Boss',
+        life:20000,shield:0,defense:0,
+        speed:0.9,stun:0.05,
+		size:2,hidden:false,
+        multi:1.5,
+		attachments:[
+            {name:'Legs',color:[15,15,15]},
+            {name:'SummonerStaff',color:[[30,30,30],[60,20,120]]},
+            {name:'SummonerArms',color:[[190,200,200],[25,25,25]]},
+            {name:'Body',color:[190,200,200]},
+            {name:'Mouth',color:[0,0,0]},
+            {name:'Eyes',color:[0,0,0]},
+        ],
+    },{
+        name:'Fallen Guardian',
+        life:15000,shield:0,defense:0,
+        speed:0.8,stun:0.05,
+		size:1.7,hidden:false,
+        multi:1,
+		attachments:[
+            {name:'GuardianSpear',color:[[250,120,180],[10,20,30],[60,60,60]]},
+            {name:'Legs',color:[0,30,45]},
+            {name:'GuardianSphere',color:[255,150,150]},
+            {name:'FallenGuardianArms',color:[0,40,60]},
+            {name:'FallenBody',color:[0,40,60]},
+            {name:'DominusCloak',color:[5,10,15]},
+            {name:'FallenBands',color:[5,15,25]},
+            {name:'Mouth',color:[0,0,0]},
+            {name:'Eyes',color:[0,0,0]},
+        ],
     },
 
 
