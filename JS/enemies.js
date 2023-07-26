@@ -360,6 +360,22 @@ types.enemy=[
             {name:'Mouth',color:[0,0,0]},
             {name:'Sunglasses',color:[0,0,0]},
         ],
+    },{
+        name:'Soul Stealer',
+        life:12500,shield:0,defense:0,
+        speed:0.85,stun:0.05,
+		size:1.8,hidden:false,
+        multi:1,
+		attachments:[
+            {name:'Legs',color:[15,0,30]},
+            {name:'SoulStealerAxe',color:[[120,60,0],[200,200,200]]},
+            {name:'SoulStealerArms',color:[10,10,10]},
+            {name:'Body',color:[10,10,10]},
+            {name:'Mouth',color:[0,0,0]},
+            {name:'Eyes',color:[0,0,0]},
+            {name:'Cloak',color:[20,0,40]},
+            {name:'Horns',color:[200,50,150]},
+        ],
     },
 
 

@@ -93,6 +93,10 @@ class enemy extends entity{
             case 'SCT':
                 this.operation={timer:0,step:0,target:{x:0,y:0}}
             break
+            case 'Soul Stealer':
+                this.anim.hand={x:0,y:0,spin:0}
+                this.operation={timer:0,step:0,target:{x:0,y:0}}
+            break
         }
         for(let a=0,la=this.attachments.length;a<la;a++){
             switch(this.attachments[a].name){
@@ -153,6 +157,23 @@ class enemy extends entity{
             },false))
         }
     }
+    stunAngle(range,angle,value,type){
+        let hits=0
+        for(let a=0,la=entities.towers.length;a<la;a++){
+            if(dist(this.position.x,this.position.y,entities.towers[a].position.x,entities.towers[a].position.y)<range){
+                let direction=atan2(this.position.x-entities.towers[a].position.x,entities.towers[a].position.y-this.position.y)
+                if(abs(direction-(this.direction+this.anim.direction))<angle||
+                abs(direction-360-(this.direction+this.anim.direction))<angle||
+                abs(direction+360-(this.direction+this.anim.direction))<angle||
+                abs(direction-720-(this.direction+this.anim.direction))<angle||
+                abs(direction+720-(this.direction+this.anim.direction))<angle){
+                    entities.towers[a].applyStun(value,type)
+                    hits++
+                }
+            }
+        }
+        return hits
+    }
     display(){
         this.layer.push()
         this.layer.translate(this.position.x+this.offset.position.x,this.position.y+this.offset.position.x)
@@ -171,14 +192,14 @@ class enemy extends entity{
                         case 'Arms':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
                             this.layer.rotate(lsin(this.rates.main*4)*20)
-                            this.layer.ellipse(-15,0,12,12)
-                            this.layer.ellipse(15,0,12,12)
+                            this.layer.ellipse(-15,0,12)
+                            this.layer.ellipse(15,0,12)
                             this.layer.rotate(lsin(this.rates.main*4)*-20)
                         break
                         case 'Legs':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
-                            this.layer.ellipse(5,(lsin(this.rates.main*4))*-7,12,12)
-                            this.layer.ellipse(-5,(lsin(this.rates.main*4))*7,12,12)
+                            this.layer.ellipse(5,(lsin(this.rates.main*4))*-7,12)
+                            this.layer.ellipse(-5,(lsin(this.rates.main*4))*7,12)
                         break
                         case 'Mouth':
                             this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
@@ -212,14 +233,14 @@ class enemy extends entity{
                         case 'Arms-Transparent':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*this.attachments[a].color[3])
                             this.layer.rotate(lsin(this.rates.main*4)*20)
-                            this.layer.ellipse(-15,0,12,12)
-                            this.layer.ellipse(15,0,12,12)
+                            this.layer.ellipse(-15,0,12)
+                            this.layer.ellipse(15,0,12)
                             this.layer.rotate(lsin(this.rates.main*4)*-20)
                         break
                         case 'Legs-Transparent':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*this.attachments[a].color[3])
-                            this.layer.ellipse(5,(lsin(this.rates.main*4))*-7,12,12)
-                            this.layer.ellipse(-5,(lsin(this.rates.main*4))*7,12,12)
+                            this.layer.ellipse(5,(lsin(this.rates.main*4))*-7,12)
+                            this.layer.ellipse(-5,(lsin(this.rates.main*4))*7,12)
                         break
                         case 'Mouth-Transparent':
                             this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*this.attachments[a].color[3])
@@ -304,8 +325,8 @@ class enemy extends entity{
                         case 'OneMovedArms':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
                             this.layer.rotate(lsin(this.rates.main*4)*20)
-                            this.layer.ellipse(-15,this.anim.hand,12,12)
-                            this.layer.ellipse(15,0,12,12)
+                            this.layer.ellipse(-15,this.anim.hand,12)
+                            this.layer.ellipse(15,0,12)
                             this.layer.rotate(lsin(this.rates.main*4)*-20)
                         break
                         case 'FallenBody':
@@ -397,22 +418,22 @@ class enemy extends entity{
                         case 'Arm1Flash':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
                             this.layer.rotate(lsin(this.rates.main*4)*20)
-                            this.layer.ellipse(-15,0,12,12)
+                            this.layer.ellipse(-15,0,12)
                             this.layer.rotate(lsin(this.rates.main*4)*-20)
                         break
                         case 'Arm2Flash':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
                             this.layer.rotate(lsin(this.rates.main*4)*20)
-                            this.layer.ellipse(15,0,12,12)
+                            this.layer.ellipse(15,0,12)
                             this.layer.rotate(lsin(this.rates.main*4)*-20)
                         break
                         case 'Leg1Flash':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
-                            this.layer.ellipse(-5,(lsin(this.rates.main*4))*7,12,12)
+                            this.layer.ellipse(-5,(lsin(this.rates.main*4))*7,12)
                         break
                         case 'Leg2Flash':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
-                            this.layer.ellipse(5,(lsin(this.rates.main*4))*-7,12,12)
+                            this.layer.ellipse(5,(lsin(this.rates.main*4))*-7,12)
                         break
                         case 'AngerEyes':
                             this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
@@ -468,9 +489,9 @@ class enemy extends entity{
                         case 'TemplarArms':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
                             this.layer.rotate(lsin(this.rates.main*4)*20)
-                            this.layer.ellipse(15,0,12,12)
+                            this.layer.ellipse(15,0,12)
                             this.layer.rotate(lsin(this.rates.main*4)*-20)
-                            this.layer.ellipse(-8,11,12,12)
+                            this.layer.ellipse(-8,11,12)
                         break
                         case 'TemplarArmBands':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
@@ -625,6 +646,32 @@ class enemy extends entity{
                             this.layer.rect(-4,1,5,5,1)
                             this.layer.rect(4,1,5,5,1)
                         break
+                        case 'SoulStealerAxe':
+                            this.layer.push()
+                            this.layer.translate(-15+this.anim.hand.x,this.anim.hand.y)
+                            this.layer.rotate(this.anim.hand.spin)
+                            this.layer.stroke(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade)
+                            this.layer.strokeWeight(3)
+                            this.layer.line(0,0,0,26)
+                            this.layer.fill(this.attachments[a].color[1][0],this.attachments[a].color[1][1],this.attachments[a].color[1][2],this.fade)
+                            this.layer.noStroke()
+                            this.layer.quad(1.5,24,1.5,16,12,14,12,26)
+                            this.layer.pop()
+                        break
+                        case 'SoulStealerArms':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
+                            this.layer.ellipse(15,0,12)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
+                            this.layer.ellipse(-15+this.anim.hand.x,this.anim.hand.y,12)
+                        break
+                        case 'Horns':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+
+                        break
+
+                        /*this.anim.hand={x:0,y:0,spin:0}
+                this.operation={timer:0,step:0,target:{x:0,y:0}}*/
 
 
 
@@ -645,14 +692,14 @@ class enemy extends entity{
                         case 'Arms':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
                             this.layer.rotate(lsin(this.rates.main*4)*20)
-                            this.layer.ellipse(-15,0,12,12)
-                            this.layer.ellipse(15,0,12,12)
+                            this.layer.ellipse(-15,0,12)
+                            this.layer.ellipse(15,0,12)
                             this.layer.rotate(lsin(this.rates.main*4)*-20)
                         break
                         case 'Legs':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
-                            this.layer.ellipse(5,(lsin(this.rates.main*4))*-7,12,12)
-                            this.layer.ellipse(-5,(lsin(this.rates.main*4))*7,12,12)
+                            this.layer.ellipse(5,(lsin(this.rates.main*4))*-7,12)
+                            this.layer.ellipse(-5,(lsin(this.rates.main*4))*7,12)
                         break
                         case 'Mouth':
                             this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
@@ -666,8 +713,8 @@ class enemy extends entity{
                             this.layer.point(4,2)
                         break
                         case 'MathArms':
-                            this.layer.ellipse(-15*lcos(lsin(this.rates.main*4)*20),-15*lsin(lsin(this.rates.main*4)*20),12,12)
-                            this.layer.ellipse(15*lcos(lsin(this.rates.main*4)*20),15*lsin(lsin(this.rates.main*4)*20),12,12)
+                            this.layer.ellipse(-15*lcos(lsin(this.rates.main*4)*20),-15*lsin(lsin(this.rates.main*4)*20),12)
+                            this.layer.ellipse(15*lcos(lsin(this.rates.main*4)*20),15*lsin(lsin(this.rates.main*4)*20),12)
                         break*/
                 }
             break
@@ -694,7 +741,7 @@ class enemy extends entity{
         }
         this.layer.fill(0,this.fade*this.anim.life)
         this.layer.textSize(6)
-        this.layer.text(max(0,ceil(convert(this.life)))+"/"+max(0,ceil(convert(this.base.life))),0,0.5)
+        this.layer.text(convert(this.life)+"/"+convert(this.base.life),0,0.5)
         if(this.base.shield>0){
             switch(this.name){
                 default:
@@ -714,7 +761,7 @@ class enemy extends entity{
                     }
                     this.layer.fill(0,this.fade*this.anim.life)
                     this.layer.textSize(6)
-                    this.layer.text(max(0,ceil(convert(this.shield)))+"/"+max(0,ceil(convert(this.base.shield))),0,0.5)
+                    this.layer.text(convert(this.shield)+"/"+convert(this.base.shield),0,0.5)
                 break
             }
         }
@@ -962,6 +1009,76 @@ class enemy extends entity{
                             break
                         }
                     break
+                    case 'Soul Stealer':
+                        switch(this.operation.step){
+                            case 0:
+                                for(let a=0,la=entities.towers.length;a<la;a++){
+                                    if(dist(entities.towers[a].position.x,entities.towers[a].position.y,this.position.x,this.position.y)<80){
+                                        this.operation.step=1
+                                        this.operation.timer=0
+                                        this.operation.target={x:entities.towers[a].position.x,y:entities.towers[a].position.y}
+                                        this.speed=0
+                                        la=0
+                                    }
+                                }
+                            break
+                            case 1:
+                                let goal=atan2(this.position.x-this.operation.target.x,this.operation.target.y-this.position.y)
+                                let value=directionValue(this.direction+this.anim.direction,goal,3)
+                                switch(value){
+                                    case 0:
+                                        this.anim.direction=goal-this.direction
+                                        this.operation.step=2
+                                    break
+                                    case 1:
+                                        this.anim.direction+=3
+                                    break
+                                    case 2:
+                                        this.anim.direction-=3
+                                    break
+                                }
+                            break
+                            case 2:
+                                this.operation.timer++
+                                if(this.operation.timer<=30){
+                                    this.anim.hand.x+=0.5
+                                    this.anim.hand.y+=0.5
+                                    this.anim.hand.spin+=2
+                                }else if(this.operation.timer<=60){
+                                    this.anim.hand.spin-=4
+                                    if(this.operation.timer==45){
+                                        this.summonPosition(this.stunAngle(80,30,150,0),40,['Soul'])
+                                    }
+                                }else if(this.operation.timer<=90){
+                                    this.anim.hand.x-=0.5
+                                    this.anim.hand.y-=0.5
+                                    this.anim.hand.spin+=2
+                                }else{
+                                    this.operation.step=3
+                                    this.operation.timer=0
+                                }
+                            break
+                            case 3:
+                                if(abs(this.anim.direction)<3){
+                                    this.anim.direction=0
+                                    this.operation.step=4
+                                    this.speed=this.recall.speed
+                                }else if(this.anim.direction>0){
+                                    this.anim.direction-=3
+                                }else if(this.anim.direction<0){
+                                    this.anim.direction+=3
+                                }
+                                this.operation.timer++
+                            break
+                            case 4:
+                                this.operation.timer++
+                                if(this.operation.timer==900){
+                                    this.operation.step=0
+                                }
+                            break
+                        }
+                    break
+                
                 }
             }
         }else{

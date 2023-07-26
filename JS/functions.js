@@ -41,9 +41,9 @@ function findName(name,list){
 }
 function convert(value){
 	if(value>=10000){
-		return round(value/100)/10+'K'
+		return max(0,round(value/100)/10)+'K'
 	}
-	return value
+	return max(0,ceil(value))
 }
 function pointInsideBox(point,box){
 	return point.position.x>box.position.x-box.width/2&&point.position.x<box.position.x+box.width/2&&point.position.y>box.position.y-box.height/2&&point.position.y<box.position.y+box.height/2
