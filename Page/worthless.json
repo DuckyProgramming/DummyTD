@@ -1,0 +1,57 @@
+{
+    "name":"Sakura Ebi",
+    "age":"13",
+    "posessions":[
+        {
+            "name":"Hanasu",
+            "type":"Weapon",
+            "class":"Scythe"
+        },{
+            "name":"Sakura's Kimono",
+            "type":"Clothing",
+            "position":"Both",
+            "class":"Major",
+            "worn-by-default":true
+        },{
+            "name":"Sakura's Sandals",
+            "type":"Clothing",
+            "position":"Feet",
+            "class":"Minor",
+            "worn-by-default":true
+        },{
+            "name":"Sakura's Panties",
+            "type":"Clothing",
+            "position":"Lower",
+            "class":"Underwear",
+            "worn-by-default":true
+        },{
+            "name":"Sakura's Hair Flowers",
+            "type":"Clothing",
+            "position":"Head",
+            "class":"Accessory",
+            "worn-by-default":true
+        },{
+            "name":"Sakura's Bikini",
+            "type":"Clothing",
+            "position":"Both",
+            "class":"Swimsuit",
+            "worn-by-default":false
+        },{
+            "name":"Sakura's Necklace",
+            "type":"Charm",
+            "worn-by-default":false
+        },{
+            "name":"Books",
+            "type":"Hobby"
+        },{
+            "name":"Sheet Music",
+            "type":"Hobby"
+        },{
+            "name":"Chess Set",
+            "type":"Hobby"
+        },{
+            "name":"Calligraphy Set",
+            "type":"Hobby"
+        }
+    ]
+}

@@ -104,10 +104,30 @@ class enemy extends entity{
                 this.anim.hand={y:0,spin:0}
                 this.operation={timer:0,step:0,target:{x:0,y:0}}
             break
+            case 'Unknown':
+                this.subs=[]
+                this.operation={timer:0,step:0}
+            break
+            case 'Fallen Soul':
+                this.anim.hand=0
+                this.operation={timer:0,step:0}
+            break
+            case 'Gold Guard':
+                this.anim.hand=0
+                this.operation={timer:0,step:0}
+            break
+            case 'Vindicator':
+                this.anim.hand={x:0,y:0,hammer:0,spin:0}
+                this.operation={timer:0,step:0,target:{x:0,y:0},trigger:false}
+                this.defense=40
+            break
         }
         for(let a=0,la=this.attachments.length;a<la;a++){
             switch(this.attachments[a].name){
                 case 'FallenRusherArms': case 'FallenRusherShield':
+                case 'TemplarShield':
+                case 'GoldGuardArms': case 'GoldGuardTrident':
+                case 'VindicatorArms': case 'VindicatorArmsGlow': case 'VindicatorArmbands': case 'VindicatorShield':
                     this.anim.attachments.push({main:0})
                 break
                 case 'Leg1Flash': case 'Leg2Flash': case 'Arm1Flash': case 'Arm2Flash': case 'BodyFlash':
@@ -119,9 +139,6 @@ class enemy extends entity{
                 break
                 case 'LeadBalloon':
                     this.anim.attachments.push({direction:[0,120,240],radius:24,state:0})
-                break
-                case 'TemplarShield':
-                    this.anim.attachments.push({main:0})
                 break
                 case 'SlowKingShield':
                     this.anim.attachments.push({main:1})
@@ -164,6 +181,16 @@ class enemy extends entity{
             },false))
         }
     }
+    stunRadius(range,value,type){
+        let hits=0
+        for(let a=0,la=entities.towers.length;a<la;a++){
+            if(dist(this.position.x,this.position.y,entities.towers[a].position.x,entities.towers[a].position.y)<range){
+                entities.towers[a].applyStun(value,type)
+                hits++
+            }
+        }
+        return hits
+    }
     stunAngle(range,angle,value,type){
         let hits=0
         for(let a=0,la=entities.towers.length;a<la;a++){
@@ -181,6 +208,25 @@ class enemy extends entity{
         }
         return hits
     }
+    sub(x,y,direction,size,color){
+        this.layer.push()
+        this.layer.translate(x,y)
+        this.layer.rotate(direction)
+        this.layer.scale(size)
+        this.layer.fill(color[1][0],color[1][1],color[1][2],this.fade)
+        this.layer.ellipse(-15,0,12)
+        this.layer.ellipse(15,0,12)
+        this.layer.fill(color[0][0],color[0][1],color[0][2],this.fade)
+        this.layer.ellipse(0,0,24)
+        this.layer.stroke(color[2][0],color[2][1],color[2][2],this.fade)
+        this.layer.strokeWeight(2)
+        this.layer.line(-4,7,4,7)
+        this.layer.stroke(color[3][0],color[3][1],color[3][2],this.fade)
+        this.layer.strokeWeight(3)
+        this.layer.point(-4,2)
+        this.layer.point(4,2)
+        this.layer.pop()
+    }
     display(){
         this.layer.push()
         this.layer.translate(this.position.x+this.offset.position.x,this.position.y+this.offset.position.x)
@@ -194,7 +240,7 @@ class enemy extends entity{
                     switch(this.attachments[a].name){
                         case 'Body': case 'BodyFlash':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
-                            this.layer.ellipse(0,0,24,24)
+                            this.layer.ellipse(0,0,24)
                         break
                         case 'Arms':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
@@ -235,7 +281,7 @@ class enemy extends entity{
                         break
                         case 'Body-Transparent':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*this.attachments[a].color[3])
-                            this.layer.ellipse(0,0,24,24)
+                            this.layer.ellipse(0,0,24)
                         break
                         case 'Arms-Transparent':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*this.attachments[a].color[3])
@@ -500,7 +546,7 @@ class enemy extends entity{
                             this.layer.rotate(lsin(this.rates.main*4)*-20)
                             this.layer.ellipse(-8,11,12)
                         break
-                        case 'TemplarArmBands':
+                        case 'TemplarArmbands':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
                             this.layer.rotate(lsin(this.rates.main*4)*20)
                             this.layer.quad(13,-6,13,6,16,6.5,16,-6.5)
@@ -766,6 +812,183 @@ class enemy extends entity{
                             this.layer.rect(-7,14+this.anim.hand.y,12,2)
                             this.layer.rect(-7,14+this.anim.hand.y,2,4)
                         break
+                        case 'UnknownSubs':
+                            this.sub(-10,-9,60,0.35,this.attachments[a].color)
+                            this.sub(2,-12,290,0.25,this.attachments[a].color)
+                            this.sub(11,-8,150,0.3,this.attachments[a].color)
+                            this.sub(-13,3,330,0.35,this.attachments[a].color)
+                            this.sub(12,4,200,0.25,this.attachments[a].color)
+                            this.sub(-6,11,10,0.3,this.attachments[a].color)
+                            this.sub(5,12,250,0.25,this.attachments[a].color)
+                        break
+                        case 'BodyGlow':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*0.2)
+                            for(let b=0,lb=4;b<lb;b++){
+                                this.layer.ellipse(0,0,26+b*2)
+                            }
+                        break
+                        case 'FallenSoulArms':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
+                            this.layer.ellipse(15,0,12)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
+                            this.layer.ellipse(-12,10+this.anim.hand,12)
+                        break
+                        case 'FallenSoulArmsGlow':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*0.2)
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
+                            for(let b=0,lb=4;b<lb;b++){
+                                this.layer.ellipse(15,0,14+b*2)
+                            }
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
+                            for(let b=0,lb=4;b<lb;b++){
+                                this.layer.ellipse(-12,10+this.anim.hand,14+b*2)
+                            }
+                        break
+                        case 'FallenSoulWings':
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.strokeWeight(4)
+                            this.layer.arc(-8,-15,6,16,95,160)
+			                this.layer.arc(8,-15,6,16,20,85)
+                        break
+                        case 'FallenSoulKnife':
+                            this.layer.stroke(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade)
+                            this.layer.strokeWeight(3)
+                            this.layer.line(-12,10+this.anim.hand,-12,20+this.anim.hand)
+                            this.layer.fill(this.attachments[a].color[1][0],this.attachments[a].color[1][1],this.attachments[a].color[1][2],this.fade)
+                            this.layer.noStroke()
+                            this.layer.triangle(-8,20+this.anim.hand,-16,20+this.anim.hand,-12,32+this.anim.hand)
+                        break
+                        case 'FallenSoulEyes':
+                            this.layer.stroke(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade)
+                            this.layer.strokeWeight(5)
+                            this.layer.line(-7,4,-3,6)
+                            this.layer.line(7,4,3,6)
+                            this.layer.stroke(this.attachments[a].color[1][0],this.attachments[a].color[1][1],this.attachments[a].color[1][2],this.fade)
+                            this.layer.strokeWeight(2)
+                            this.layer.line(-7,4,-3,6)
+                            this.layer.line(7,4,3,6)
+                        break
+                        case 'GoldGuardTrident':
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.strokeWeight(2.5)
+                            this.layer.line(map(this.anim.attachments[a].main,0,1,-20,-15),map(this.anim.attachments[a].main,0,1,12,this.anim.hand+20),map(this.anim.attachments[a].main,0,1,16,-15),map(this.anim.attachments[a].main,0,1,12,this.anim.hand-16))
+                            this.layer.push()
+                            this.layer.translate(map(this.anim.attachments[a].main,0,1,-20,-15),map(this.anim.attachments[a].main,0,1,12,this.anim.hand+20))
+                            this.layer.rotate(this.anim.attachments[a].main*-90)
+                            this.layer.arc(0,0,12,6,-90,90)
+                            this.layer.pop()
+                        break
+                        case 'GoldGuardArms':
+                            for(let b=0,lb=5;b<lb;b++){
+                                this.layer.fill(this.attachments[a].color[0]*(0.8+b*0.2),this.attachments[a].color[1]*(0.8+b*0.2),this.attachments[a].color[2]*(0.8+b*0.2),this.fade)
+                                this.layer.ellipse(map(this.anim.attachments[a].main,0,1,6,15*lcos(lsin(this.rates.main*4)*20)),map(this.anim.attachments[a].main,0,1,13,15*lsin(lsin(this.rates.main*4)*20)),12*(1-b/lb),12*(1-b/lb))
+                                this.layer.ellipse(map(this.anim.attachments[a].main,0,1,-6,-15),map(this.anim.attachments[a].main,0,1,13,this.anim.hand),12*(1-b/lb),12*(1-b/lb))
+                            }
+                        break
+                        case 'MouthGlow':
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*0.3)
+                            this.layer.strokeWeight(4)
+                            this.layer.line(-4,7,4,7)
+                            this.layer.strokeWeight(6)
+                            this.layer.line(-4,7,4,7)
+                        break
+                        case 'EyesGlow':
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*0.3)
+                            this.layer.strokeWeight(5)
+                            this.layer.point(-4,2)
+                            this.layer.point(4,2)
+                            this.layer.strokeWeight(7)
+                            this.layer.point(-4,2)
+                            this.layer.point(4,2)
+                        break
+                        case 'LightBodyGlow':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*0.2)
+                            for(let b=0,lb=4;b<lb;b++){
+                                this.layer.ellipse(0,0,25+b)
+                            }
+                        break
+                        case 'VindicatorCape':
+                            this.layer.fill(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade)
+                            this.layer.quad(-8,0,8,0,10,-15,-10,-15)
+                            this.layer.fill(this.attachments[a].color[1][0],this.attachments[a].color[1][1],this.attachments[a].color[1][2],this.fade)
+                            this.layer.quad(-6,0,6,0,8,-13,-8,-13)
+                        break
+                        case 'VindicatorArms':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.ellipse(15*lcos(map(this.anim.attachments[a].main,0,1,90,lsin(this.rates.main*4)*20)),15*lsin(map(this.anim.attachments[a].main,0,1,90,lsin(this.rates.main*4)*20)),12)
+                            this.layer.ellipse(-14+this.anim.hand.x,5+this.anim.hand.y,12)
+                        break
+                        case 'VindicatorArmsGlow':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*0.2)
+                            for(let b=0,lb=4;b<lb;b++){
+                                this.layer.ellipse(15*lcos(map(this.anim.attachments[a].main,0,1,90,lsin(this.rates.main*4)*20)),15*lsin(map(this.anim.attachments[a].main,0,1,90,lsin(this.rates.main*4)*20)),13+b)
+                                this.layer.ellipse(-14+this.anim.hand.x,5+this.anim.hand.y,13+b)
+                            }
+                        break
+                        case 'VindicatorEyes':
+                            this.layer.stroke(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade)
+                            this.layer.strokeWeight(5)
+                            this.layer.line(-7,4,-3,6)
+                            this.layer.line(7,4,3,6)
+                            this.layer.stroke(this.attachments[a].color[1][0],this.attachments[a].color[1][1],this.attachments[a].color[1][2],this.fade)
+                            this.layer.strokeWeight(3)
+                            this.layer.line(-7,4,-3,6)
+                            this.layer.line(7,4,3,6)
+                            this.layer.stroke(this.attachments[a].color[2][0],this.attachments[a].color[2][1],this.attachments[a].color[2][2],this.fade)
+                            this.layer.strokeWeight(2)
+                            this.layer.line(-7,4,-3,6)
+                            this.layer.line(7,4,3,6)
+                        break
+                        case 'VindicatorSpikes':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.triangle(0,9,0,-6,-16,-7)
+                            this.layer.triangle(0,9,0,-6,16,-7)
+                            this.layer.triangle(0,10,0,-7,-13,-12)
+                            this.layer.triangle(0,10,0,-7,13,-12)
+                            this.layer.triangle(-3,11,-1,-10,-7,-16)
+                            this.layer.triangle(3,11,1,-10,7,-16)
+                        break
+                        case 'VindicatorArmbands':
+                            this.layer.fill(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade)
+                            this.layer.rotate(map(this.anim.attachments[a].main,0,1,90,lsin(this.rates.main*4)*20))
+                            this.layer.rect(15,0,3,12)
+                            this.layer.fill(this.attachments[a].color[1][0],this.attachments[a].color[1][1],this.attachments[a].color[1][2],this.fade)
+                            this.layer.quad(13,0,15,-2,17,0,15,2)
+                            this.layer.rotate(-map(this.anim.attachments[a].main,0,1,90,lsin(this.rates.main*4)*20))
+                            this.layer.fill(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade)
+                            this.layer.rect(-14+this.anim.hand.x,5+this.anim.hand.y,12,3)
+                            this.layer.fill(this.attachments[a].color[1][0],this.attachments[a].color[1][1],this.attachments[a].color[1][2],this.fade)
+                            this.layer.quad(-16+this.anim.hand.x,5+this.anim.hand.y,-14+this.anim.hand.x,7+this.anim.hand.y,-12+this.anim.hand.x,5+this.anim.hand.y,-14+this.anim.hand.x,3+this.anim.hand.y)
+                        break
+                        case 'VindicatorShield':
+                            this.layer.fill(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade*(1-this.anim.attachments[a].main))
+                            this.layer.triangle(-12,20.5,-12,23.5,-15,22)
+                            this.layer.triangle(12,20.5,12,23.5,15,22)
+                            this.layer.fill(this.attachments[a].color[1][0],this.attachments[a].color[1][1],this.attachments[a].color[1][2],this.fade*(1-this.anim.attachments[a].main))
+                            this.layer.rect(0,22,24,5,2)
+                            this.layer.fill(this.attachments[a].color[2][0],this.attachments[a].color[2][1],this.attachments[a].color[2][2],this.fade*(1-this.anim.attachments[a].main))
+                            this.layer.rect(0,22,20,2,1)
+                        break
+                        case 'VindicatorHammer':
+                            this.layer.push()
+                            this.layer.translate(-14+this.anim.hand.x,5+this.anim.hand.y)
+                            this.layer.rotate(this.anim.hand.spin)
+                            this.layer.stroke(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade)
+                            this.layer.strokeWeight(2)
+                            this.layer.line(0,this.anim.hand.hammer,0,15+this.anim.hand.hammer)
+                            this.layer.noStroke()
+                            this.layer.fill(this.attachments[a].color[1][0],this.attachments[a].color[1][1],this.attachments[a].color[1][2],this.fade)
+                            this.layer.rect(0,18+this.anim.hand.hammer,12,8,2)
+                            this.layer.fill(this.attachments[a].color[2][0],this.attachments[a].color[2][1],this.attachments[a].color[2][2],this.fade)
+                            this.layer.rect(0,18+this.anim.hand.hammer,10,6,1)
+                            this.layer.stroke(this.attachments[a].color[3][0],this.attachments[a].color[3][1],this.attachments[a].color[3][2],this.fade)
+                            this.layer.strokeWeight(1)
+                            this.layer.line(-4.5,21+this.anim.hand.hammer,4.5,15+this.anim.hand.hammer)
+                            this.layer.line(4.5,21+this.anim.hand.hammer,-4.5,15+this.anim.hand.hammer)
+                            this.layer.pop()
+                        break
+
 
 
 
@@ -781,7 +1004,7 @@ class enemy extends entity{
                     }
                     /*case 'Body':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
-                            this.layer.ellipse(0,0,24,24)
+                            this.layer.ellipse(0,0,24)
                         break
                         case 'Arms':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
@@ -959,6 +1182,12 @@ class enemy extends entity{
                     case 'SlowKingShield':
                         this.anim.attachments[a].main=smoothAnim(this.anim.attachments[a].main,this.shield>0,0,1,5)
                     break
+                    case 'GoldGuardArms': case 'GoldGuardTrident':
+                        this.anim.attachments[a].main=smoothAnim(this.anim.attachments[a].main,this.life/this.base.life<this.attachments[a].metric,0,1,15)
+                    break
+                    case 'VindicatorArms': case 'VindicatorArmsGlow': case 'VindicatorArmbands': case 'VindicatorShield':
+                        this.anim.attachments[a].main=smoothAnim(this.anim.attachments[a].main,this.life/this.base.life<this.attachments[a].metric,0,1,15)
+                    break
                 }
             }
             switch(this.name){
@@ -987,6 +1216,17 @@ class enemy extends entity{
                 case 'Circuit':
                     if(this.time%5==0){
                         entities.particles.push(new particle(this.layer,this.position.x,this.position.y,1,[0,205,255],this.size,random(0,360)))
+                    }
+                break
+                case 'Gold Guard':
+                    if(this.operation.step==0){
+                        this.speed=this.recall.speed*(this.life<this.base.life*0.75?1/5:1)
+                    }
+                break
+                case 'Vindicator':
+                    if(this.life<this.base.life/2&&!this.operation.trigger){
+                        this.operation.trigger=true
+                        this.defense=max(this.defense-40,min(0,this.defense))
                     }
                 break
             }
@@ -1257,8 +1497,237 @@ class enemy extends entity{
                             break
                         }
                     break
-                    
-
+                    case 'Unknown':
+                        switch(this.operation.step){
+                            case 0:
+                                for(let a=0,la=entities.towers.length;a<la;a++){
+                                    if(dist(entities.towers[a].position.x,entities.towers[a].position.y,this.position.x,this.position.y)<100){
+                                        this.operation.step=1
+                                        this.operation.timer=0
+                                        this.operation.target={x:entities.towers[a].position.x,y:entities.towers[a].position.y}
+                                        this.speed=0
+                                        la=0
+                                    }
+                                }
+                            break
+                            case 1:
+                                this.operation.timer++
+                                this.size=this.base.size*(1+0.5*lsin(this.operation.timer*3/2))
+                                if(this.operation.timer>=120){
+                                    this.stunRadius(120,180,0)
+                                    entities.particles.push(new particle(this.layer,this.position.x,this.position.y,2,[0,0,0],30,0))
+                                    this.operation.step=2
+                                    this.operation.timer=0
+                                    this.speed=this.recall.speed
+                                }
+                            break
+                            case 2:
+                                this.operation.timer++
+                                if(this.operation.timer==750){
+                                    this.operation.step=0
+                                }
+                            break
+                        }
+                    break
+                    case 'Fallen Soul':
+                        switch(this.operation.step){
+                            case 0:
+                                for(let a=0,la=entities.towers.length;a<la;a++){
+                                    if(dist(entities.towers[a].position.x,entities.towers[a].position.y,this.position.x,this.position.y)<40){
+                                        this.operation.step=1
+                                        this.operation.timer=0
+                                        this.operation.target={x:entities.towers[a].position.x,y:entities.towers[a].position.y}
+                                        this.speed=0
+                                        la=0
+                                    }
+                                }
+                            break
+                            case 1:
+                                let goal=atan2(this.position.x-this.operation.target.x,this.operation.target.y-this.position.y)
+                                let value=directionValue(this.direction+this.anim.direction,goal,3)
+                                switch(value){
+                                    case 0:
+                                        this.anim.direction=goal-this.direction
+                                        this.operation.step=2
+                                    break
+                                    case 1:
+                                        this.anim.direction+=3
+                                    break
+                                    case 2:
+                                        this.anim.direction-=3
+                                    break
+                                }
+                            break
+                            case 2:
+                                this.operation.timer++
+                                if(this.operation.timer<=15){
+                                    this.anim.hand+=0.5
+                                    if(this.operation.timer==15){
+                                        this.stunAngle(40,10,60,0)
+                                    }
+                                }else if(this.operation.timer<=30){
+                                    this.anim.hand-=0.5
+                                }else{
+                                    this.operation.step=3
+                                    this.operation.timer=0
+                                }
+                            break
+                            case 3:
+                                if(abs(this.anim.direction)<3){
+                                    this.anim.direction=0
+                                    this.operation.step=4
+                                    this.speed=this.recall.speed
+                                }else if(this.anim.direction>0){
+                                    this.anim.direction-=3
+                                }else if(this.anim.direction<0){
+                                    this.anim.direction+=3
+                                }
+                                this.operation.timer++
+                            break
+                            case 4:
+                                this.operation.timer++
+                                if(this.operation.timer==450){
+                                    this.operation.step=0
+                                }
+                            break
+                        }
+                    break
+                    case 'Gold Guard':
+                        if(this.life<this.base.life*3/4){
+                            switch(this.operation.step){
+                                case 0:
+                                    for(let a=0,la=entities.towers.length;a<la;a++){
+                                        if(dist(entities.towers[a].position.x,entities.towers[a].position.y,this.position.x,this.position.y)<60){
+                                            this.operation.step=1
+                                            this.operation.timer=0
+                                            this.operation.target={x:entities.towers[a].position.x,y:entities.towers[a].position.y}
+                                            this.speed=0
+                                            la=0
+                                        }
+                                    }
+                                break
+                                case 1:
+                                    let goal=atan2(this.position.x-this.operation.target.x,this.operation.target.y-this.position.y)
+                                    let value=directionValue(this.direction+this.anim.direction,goal,3)
+                                    switch(value){
+                                        case 0:
+                                            this.anim.direction=goal-this.direction
+                                            this.operation.step=2
+                                        break
+                                        case 1:
+                                            this.anim.direction+=3
+                                        break
+                                        case 2:
+                                            this.anim.direction-=3
+                                        break
+                                    }
+                                break
+                                case 2:
+                                    this.operation.timer++
+                                    if(this.operation.timer<=15){
+                                        this.anim.hand++
+                                        if(this.operation.timer==15){
+                                            this.stunAngle(60,15,150,0)
+                                        }
+                                    }else if(this.operation.timer<=30){
+                                        this.anim.hand--
+                                    }else{
+                                        this.operation.step=3
+                                        this.operation.timer=0
+                                    }
+                                break
+                                case 3:
+                                    if(abs(this.anim.direction)<3){
+                                        this.anim.direction=0
+                                        this.operation.step=4
+                                        this.speed=this.recall.speed*(this.life<this.base.life*0.75?1/5:1)
+                                    }else if(this.anim.direction>0){
+                                        this.anim.direction-=3
+                                    }else if(this.anim.direction<0){
+                                        this.anim.direction+=3
+                                    }
+                                    this.operation.timer++
+                                break
+                                case 4:
+                                    this.operation.timer++
+                                    if(this.operation.timer==450){
+                                        this.operation.step=0
+                                    }
+                                break
+                            }
+                        }
+                    break
+                    case 'Vindicator':
+                        switch(this.operation.step){
+                            case 0:
+                                for(let a=0,la=entities.towers.length;a<la;a++){
+                                    if(dist(entities.towers[a].position.x,entities.towers[a].position.y,this.position.x,this.position.y)<180){
+                                        this.operation.step=1
+                                        this.operation.timer=0
+                                        this.operation.target={x:entities.towers[a].position.x,y:entities.towers[a].position.y}
+                                        this.speed=0
+                                        la=0
+                                    }
+                                }
+                            break
+                            case 1:
+                                let goal=atan2(this.position.x-this.operation.target.x,this.operation.target.y-this.position.y)
+                                let value=directionValue(this.direction+this.anim.direction,goal,3)
+                                switch(value){
+                                    case 0:
+                                        this.anim.direction=goal-this.direction
+                                        this.operation.step=2
+                                    break
+                                    case 1:
+                                        this.anim.direction+=3
+                                    break
+                                    case 2:
+                                        this.anim.direction-=3
+                                    break
+                                }
+                            break
+                            case 2:
+                                this.operation.timer++
+                                if(this.operation.timer<=30){
+                                    this.anim.hand.y+=0.5
+                                    this.anim.hand.x+=0.3
+                                    this.anim.hand.spin+=0.5
+                                }else if(this.operation.timer<=90){
+                                    this.anim.hand.hammer+=lcos((this.operation.timer-30.5)*3)*4
+                                    this.anim.hand.spin-=0.5
+                                    if(this.operation.timer==60){
+                                        this.stunAngle(180,10,180,0)
+                                    }
+                                }else if(this.operation.timer<=120){
+                                    this.anim.hand.y-=0.5
+                                    this.anim.hand.x-=0.3
+                                    this.anim.hand.spin+=0.5
+                                }else{
+                                    this.operation.step=3
+                                    this.anim.hand.hammer=0
+                                    this.operation.timer=0
+                                }
+                            break
+                            case 3:
+                                if(abs(this.anim.direction)<3){
+                                    this.anim.direction=0
+                                    this.operation.step=4
+                                    this.speed=this.recall.speed
+                                }else if(this.anim.direction>0){
+                                    this.anim.direction-=3
+                                }else if(this.anim.direction<0){
+                                    this.anim.direction+=3
+                                }
+                                this.operation.timer++
+                            break
+                            case 4:
+                                this.operation.timer++
+                                if(this.operation.timer==300){
+                                    this.operation.step=0
+                                }
+                            break
+                        }
+                    break
 
 
                 }

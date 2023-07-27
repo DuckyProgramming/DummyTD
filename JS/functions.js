@@ -133,6 +133,11 @@ function kill(){
 		entities.enemies[a].life=0
 	}
 }
+function damage(value){
+	for(let a=0,la=entities.enemies.length;a<la;a++){
+		entities.enemies[a].takeDamage(value,"")
+	}
+}
 function spawn(name){
 	entities.spawner.quickSpawn(findName(name,types.enemy))
 }
