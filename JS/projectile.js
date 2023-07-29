@@ -12,6 +12,11 @@ class projectile extends entity{
                 this.speed=5
                 this.size=2
             break
+            case 2:
+                this.timer=360
+                this.speed=2
+                this.size=10
+            break
         }
     }
     display(){
@@ -23,19 +28,35 @@ class projectile extends entity{
                 this.layer.fill(40,this.fade)
                 this.layer.rect(0,0,3,6)
             break
+            case 2:
+                this.layer.fill(255,150,0,this.fade)
+                this.layer.ellipse(0,0,20,20)
+            break
         }
         this.layer.pop()
     }
     update(){
+        super.update()
         this.fade=smoothAnim(this.fade,this.timer>0&&!this.used,0,1,5)
         this.timer--
         this.position.x+=lsin(this.direction)*this.speed
         this.position.y-=lcos(this.direction)*this.speed
+        switch(this.type){
+            case 2:
+                if(this.time%30==0){
+                    entities.particles.push(new particle(this.layer,this.position.x,this.position.y,1,[30,30,30],1,random(0,360)))
+                }
+            break
+        }
         if(!this.used){
             if(this.team==0){
                 for(let a=0,la=entities.towers.length;a<la;a++){
                     if(dist(entities.towers[a].position.x,entities.towers[a].position.y,this.position.x,this.position.y)<this.size+entities.towers[a].size&&!this.used){
-                        this.used=true
+                        switch(this.type){
+                            case 1:
+                                this.used=true
+                            break
+                        }
                         entities.towers[a].applyStun(this.damage,this.damageType)
                     }
                 }

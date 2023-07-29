@@ -474,6 +474,36 @@ types.enemy=[
             {name:'Mouth',color:[0,0,0]},
             {name:'VindicatorEyes',color:[[0,0,0],[180,20,120],[150,0,100]]},
         ],
+    },{
+        name:'Molten',
+        life:150,shield:0,defense:0,
+        speed:0.95,stun:0.75,
+		size:1.05,hidden:false,
+        multi:1.25,
+		attachments:[
+            {name:'Legs',color:[40,45,40]},
+            {name:'Arms',color:[255,150,50]},
+            {name:'MoltenArmband',color:[50,55,50]},
+            {name:'Body',color:[255,150,50]},
+            {name:'Horns',color:[255,150,50]},
+            {name:'Mouth',color:[255,180,125]},
+            {name:'Eyes',color:[255,180,125]},
+            {name:'AngerEyes',color:[255,180,125]},
+        ],
+    },{
+        name:'Molten Titan',
+        life:35000,shield:0,defense:0,
+        speed:0.3,stun:0,
+		size:2.3,hidden:false,
+        multi:-1,
+		attachments:[
+            {name:'Legs',color:[40,45,40]},
+            {name:'MoltenTitanArms',color:[255,150,50]},
+            {name:'MoltenTitanArmbands',color:[50,55,50]},
+            {name:'Body',color:[255,150,50]},
+            {name:'Horns',color:[255,150,50]},
+            {name:'MoltenTitanEyes',color:[255,180,125]},
+        ],
     },
 
 
