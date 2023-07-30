@@ -94,26 +94,18 @@ class enemy extends entity{
             case 'SCT':
                 this.operation={timer:0,step:0,target:{x:0,y:0}}
             break
-            case 'Soul Stealer':
+            case 'Soul Stealer': case 'Fallen Guardian': case 'Nuclear Guardian':
                 this.anim.hand={x:0,y:0,spin:0}
                 this.operation={timer:0,step:0,target:{x:0,y:0}}
             break
             case 'Summoner Boss':
                 this.anim.hand=0
             break
-            case 'Fallen Guardian':
-                this.anim.hand={y:0,spin:0}
-                this.operation={timer:0,step:0,target:{x:0,y:0}}
-            break
             case 'Unknown':
                 this.subs=[]
                 this.operation={timer:0,step:0}
             break
-            case 'Fallen Soul':
-                this.anim.hand=0
-                this.operation={timer:0,step:0}
-            break
-            case 'Gold Guard':
+            case 'Fallen Soul': case 'Gold Guard':
                 this.anim.hand=0
                 this.operation={timer:0,step:0}
             break
@@ -126,13 +118,18 @@ class enemy extends entity{
                 this.anim.hand={main:0}
                 this.operation={timer:0,step:0,target:{x:0,y:0},attack:0}
             break
-            case 'Void Reaver':
+            case 'Void Reaver': case 'Nuclear Void Reaver':
                 this.anim.shield=0
                 this.anim.armor=1
                 this.anim.hand={main:0}
                 this.operation={timer:0,step:0,target:{x:0,y:0},attack:0,shield:0,spawn:0}
                 this.anim.hand={main:0}
                 this.spawns=['Fallen','Chained Boss','Boomer','Mega Speedy','Mystery Boss','Circuit','Templar','Slow King','Soul','Health Cultist','Fallen Guardian','Unknown','White Balloon','Zebra Balloon']
+            break
+            case 'Gravekeeper':
+                this.anim.hand={x:0,y:0,spin:0}
+                this.operation={timer:0,step:0,target:{x:0,y:0}}
+                this.spawns=['Normal','Quick','Hefty','Hidden','Mystery','Fallen','Fallen Rusher','Molten']
             break
         }
         for(let a=0,la=this.attachments.length;a<la;a++){
@@ -147,7 +144,7 @@ class enemy extends entity{
                     this.anim.attachments.push({possibilities:[[200,0,255],[0,100,200],[0,150,255],[255,150,50],[255,75,255],[50,255,50],[125,255,125],[255,255,100],[180,180,180],[255,100,100]]})
                     this.attachments[a].color=this.anim.attachments[a].possibilities[floor(random(0,this.anim.attachments[a].possibilities.length))]
                 break
-                case 'Shocks':
+                case 'Shocks': case 'SmallShocks':
                     this.anim.attachments.push({shocks:[[random(0,360),random(15,50),1],[random(0,360),random(15,50),0.8],[random(0,360),random(15,50),0.6],[random(0,360),random(15,50),0.4],[random(0,360),random(15,50),0.2]]})
                 break
                 case 'LeadBalloon':
@@ -286,16 +283,16 @@ class enemy extends entity{
                         break
                         case 'Armchain':
                             this.layer.rotate(lsin(this.rates.main*4)*20)
-                            this.layer.stroke(50,this.fade)
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
                             this.layer.strokeWeight(1)
-                            this.layer.ellipse(-16,-1.7,3,3)
-                            this.layer.ellipse(-16,1.7,3,3)
-                            this.layer.ellipse(-15,-5,3,3)
-                            this.layer.ellipse(-15,5,3,3)
-                            this.layer.ellipse(16,-1.7,3,3)
-                            this.layer.ellipse(16,1.7,3,3)
-                            this.layer.ellipse(15,-5,3,3)
-                            this.layer.ellipse(15,5,3,3)
+                            this.layer.ellipse(-16,-1.7,3)
+                            this.layer.ellipse(-16,1.7,3)
+                            this.layer.ellipse(-15,-5,3)
+                            this.layer.ellipse(-15,5,3)
+                            this.layer.ellipse(16,-1.7,3)
+                            this.layer.ellipse(16,1.7,3)
+                            this.layer.ellipse(15,-5,3)
+                            this.layer.ellipse(15,5,3)
                             this.layer.rotate(lsin(this.rates.main*4)*-20)
                         break
                         case 'Body-Transparent':
@@ -478,8 +475,8 @@ class enemy extends entity{
                         case 'ArmbandsQuad':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
                             this.layer.rotate(lsin(this.rates.main*4)*20)
-                            this.layer.quad(-13,-6,-13,6,-15,6,-15,-6)
-					        this.layer.quad(13,-6,13,6,15,6,15,-6)
+                            this.layer.quad(-13,-5.5,-13,5.5,-15,6,-15,-6)
+					        this.layer.quad(13,-5.5,13,5.5,15,6,15,-6)
                             this.layer.rotate(lsin(this.rates.main*4)*-20)
                         break
                         case 'LightningImprint':
@@ -1153,6 +1150,138 @@ class enemy extends entity{
                             }
                             this.layer.rotate(this.time*-1.5)
                         break
+                        case 'MutatedArms':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
+                            this.layer.ellipse(-15,0,12)
+                            this.layer.ellipse(18,0,16)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
+                        break
+                        case 'MutatedArmchain':
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.strokeWeight(1)
+                            this.layer.ellipse(-16,-1.7,3)
+                            this.layer.ellipse(-16,1.7,3)
+                            this.layer.ellipse(-15,-5,3)
+                            this.layer.ellipse(-15,5,3)
+                            this.layer.ellipse(20,-2,3.6)
+                            this.layer.ellipse(20,2,3.6)
+                            this.layer.ellipse(18,-6,3.6)
+                            this.layer.ellipse(18,6,3.6)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
+                        break
+                        case 'BigArms':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
+                            this.layer.ellipse(-16,0,13)
+                            this.layer.ellipse(16,0,13)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
+                        break
+                        case 'BigArmchain':
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.strokeWeight(1)
+                            this.layer.ellipse(-17,-1.8,3.2)
+                            this.layer.ellipse(-17,1.8,3.2)
+                            this.layer.ellipse(-16,-5,3.2)
+                            this.layer.ellipse(-16,5,3.2)
+                            this.layer.ellipse(17,-1.8,3.2)
+                            this.layer.ellipse(17,1.8,3.2)
+                            this.layer.ellipse(16,-5,3.2)
+                            this.layer.ellipse(16,5,3.2)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
+                        break
+                        case 'HazmatMouth':
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.strokeWeight(2)
+                            this.layer.arc(0,6,21,5,5,175)
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.noStroke()
+                            this.layer.rect(0,8,10,5,2)
+                        break
+                        case 'HazardousArmbandsQuad':
+                            this.layer.fill(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade)
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
+                            this.layer.quad(-12,-5.25,-12,5.25,-15,6,-15,-6)
+					        this.layer.quad(12,-5.25,12,5.25,15,6,15,-6)
+                            this.layer.fill(this.attachments[a].color[1][0],this.attachments[a].color[1][1],this.attachments[a].color[1][2],this.fade)
+                            this.layer.quad(-13,-5.5,-13,5.5,-14,5.75,-14,-5.75)
+					        this.layer.quad(13,-5.5,13,5.5,14,5.75,14,-5.75)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
+                        break
+                        case 'ErrorDisc':
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.strokeWeight(9)
+                            this.layer.ellipse(-25*lcos(lsin(this.rates.main*4)*20),-25*lsin(lsin(this.rates.main*4)*20),12)
+                        break
+                        case 'GravekeeperShovel':
+                            this.layer.push()
+                            this.layer.translate(-15+this.anim.hand.x,this.anim.hand.y)
+                            this.layer.rotate(this.anim.hand.spin)
+                            this.layer.stroke(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade)
+                            this.layer.strokeWeight(2)
+                            this.layer.line(0,0,0,16)
+                            this.layer.fill(this.attachments[a].color[1][0],this.attachments[a].color[1][1],this.attachments[a].color[1][2],this.fade)
+                            this.layer.noStroke()
+                            this.layer.arc(0,16,10,20,0,180)
+                            this.layer.fill(this.attachments[a].color[2][0],this.attachments[a].color[2][1],this.attachments[a].color[2][2],this.fade)
+                            this.layer.arc(0,16,5,20,0,180)
+                            this.layer.pop()
+                        break
+                        case 'NuclearGuardianSpear':
+                            this.layer.push()
+                            this.layer.translate(-7,14+this.anim.hand.y)
+                            this.layer.rotate(this.anim.hand.spin)
+                            this.layer.stroke(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade)
+                            this.layer.strokeWeight(2)
+                            this.layer.line(24,4,26,-4)
+                            this.layer.line(20,4,22,-4)
+                            this.layer.stroke(this.attachments[a].color[1][0],this.attachments[a].color[1][1],this.attachments[a].color[1][2],this.fade)
+                            this.layer.strokeWeight(3)
+                            this.layer.line(-6,0,30,0)
+                            this.layer.stroke(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade)
+                            this.layer.strokeWeight(2)
+                            this.layer.line(28,4,26,-4)
+                            this.layer.line(24,4,22,-4)
+                            this.layer.line(20,4,18,-4)
+                            this.layer.fill(this.attachments[a].color[2][0],this.attachments[a].color[2][1],this.attachments[a].color[2][2],this.fade)
+                            this.layer.noStroke()
+                            this.layer.triangle(30,-6,30,6,40,0)
+                            this.layer.fill(this.attachments[a].color[3][0],this.attachments[a].color[3][1],this.attachments[a].color[3][2],this.fade)
+                            this.layer.triangle(36,-6,36,6,41,0)
+                            this.layer.pop()
+                        break
+                        case 'FarArms':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
+                            this.layer.ellipse(-18,0,12)
+                            this.layer.ellipse(18,0,12)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
+                        break
+                        case 'AmalgamationBones':
+                            this.layer.stroke(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.strokeWeight(3)
+                            this.layer.rotate(lsin(this.rates.main*4)*20)
+                            this.layer.line(-18,0,-20,8)
+                            this.layer.line(18,0,24,-4)
+                            this.layer.rotate(lsin(this.rates.main*4)*-20)
+                            this.layer.line(0,-8,-5,-12)
+                            this.layer.line(-3,8,0,14)
+                        break
+                        case 'AmalgamationBody':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.rect(0,0,30,16,6)
+                            this.layer.ellipse(0,0,24)
+                        break
+                        case 'SmallShocks':
+                            for(let b=0,lb=this.anim.attachments[a].shocks.length;b<lb;b++){
+                                this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*this.anim.attachments[a].shocks[b][2])
+                                this.layer.rotate(this.anim.attachments[a].shocks[b][0])
+                                this.layer.triangle(-2,0,2,0,0,this.anim.attachments[a].shocks[b][1]*0.6)
+                                this.layer.rotate(-this.anim.attachments[a].shocks[b][0])
+                            }
+                        break
 
 
 
@@ -1317,7 +1446,7 @@ class enemy extends entity{
                             this.attachments[a].color=this.anim.attachments[a].possibilities[floor(random(0,this.anim.attachments[a].possibilities.length))]
                         }
                     break
-                    case 'Shocks':
+                    case 'Shocks': case 'SmallShocks':
                         for(let b=0,lb=this.anim.attachments[a].shocks.length;b<lb;b++){
                             this.anim.attachments[a].shocks[b][2]-=0.04
                             if(this.anim.attachments[a].shocks[b][2]<=0){
@@ -1458,8 +1587,13 @@ class enemy extends entity{
                 case 'Zebra Balloon':
                     this.speed=this.recall.speed*(this.life<this.base.life/3?1/3:1)
                 break
-                case 'Void Reaver':
+                case 'Void Reaver': case 'Nuclear Void Reaver':
                     if(this.time%5==0&&this.anim.armor<=0){
+                        entities.particles.push(new particle(this.layer,this.position.x,this.position.y,8,[0,0,0],this.size,random(0,360)))
+                    }
+                break
+                case 'Void Shadow':
+                    if(this.time%15==0){
                         entities.particles.push(new particle(this.layer,this.position.x,this.position.y,8,[0,0,0],this.size,random(0,360)))
                     }
                 break
@@ -1494,7 +1628,7 @@ class enemy extends entity{
                     break
                     case 'Circuit':
                         if(this.time%180==150){
-                            entities.particles.push(new particle(this.layer,this.position.x,this.position.y,3,[105,255,255],20,0))
+                            entities.particles.push(new particle(this.layer,this.position.x,this.position.y,3,[105,255,255],100,0))
                             for(let a=0,la=entities.enemies.length;a<la;a++){
                                 if(entities.enemies[a].life<=10000){
                                     entities.enemies[a].speed*=1.2
@@ -1700,7 +1834,14 @@ class enemy extends entity{
                                 }else if(this.operation.timer<=45){
                                     this.anim.hand.y+=0.5
                                     if(this.operation.timer==45){
-                                        this.stunAngle(100,15,180,0)
+                                        switch(this.name){
+                                            case 'Fallen Guardian':
+                                                this.stunAngle(100,15,180,0)
+                                            break
+                                            case 'Nuclear Guardian':
+                                                this.stunAngle(100,15,240,0)
+                                            break
+                                        }
                                     }
                                 }else if(this.operation.timer<=60){
                                     this.anim.hand.y-=0.5
@@ -1968,6 +2109,62 @@ class enemy extends entity{
                     case 'Molten':
                         this.life=min(this.life+0.1,this.base.life)
                     break
+                    case 'Speedy King':
+                        if(this.time%900==450){
+                            entities.particles.push(new particle(this.layer,this.position.x,this.position.y,3,[0,200,255],20,0))
+                            this.speed*=1.1
+                            this.recall.speed*=1.1
+                            this.counters.zaps++
+                            for(let b=0,lb=this.counters.zaps;b<lb;b++){
+                                entities.particles.push(new particle(this.layer,this.position.x+b*12-this.counters.zaps*6+6,this.position.y,4,[105,255,255],1,0))
+                            }
+                        }
+                    break
+                    case 'Gravekeeper':
+                        switch(this.operation.step){
+                            case 0:
+                                if(floor(random(0,300))==0){
+                                    this.operation.step=1
+                                    this.operation.timer=0
+                                    this.speed=0
+                                    la=0
+                                }
+                            break
+                            case 1:
+                                this.operation.timer++
+                                if(this.operation.timer<=30){
+                                    this.anim.hand.x+=0.5
+                                    this.anim.hand.y+=0.5
+                                    this.anim.hand.spin+=1.5
+                                }else if(this.operation.timer<=60||this.operation.timer>90&&this.operation.timer<=120){
+                                    this.anim.hand.spin-=3
+                                    if(this.operation.timer==60||this.operation.timer==120){
+                                        this.summonPosition(2,25,this.spawns)
+                                    }
+                                }else if(this.operation.timer<=90){
+                                    this.anim.hand.spin+=3
+                                    if(this.operation.timer==90){
+                                        this.summonPosition(2,25,this.spawns)
+                                    }
+                                }else if(this.operation.timer<=150){
+                                    this.anim.hand.x-=0.5
+                                    this.anim.hand.y-=0.5
+                                    this.anim.hand.spin+=1.5
+                                }else{
+                                    this.operation.step=2
+                                    this.operation.timer=0
+                                    this.speed=this.recall.speed
+                                }
+                            break
+                            case 2:
+                                this.operation.timer++
+                                if(this.operation.timer==450){
+                                    this.operation.step=0
+                                }
+                            break
+                        }
+                    break
+                    
 
                 }
             }
@@ -2091,10 +2288,10 @@ class enemy extends entity{
                         }
                     }
                 break
-                case 'Void Reaver':
+                case 'Void Reaver': case 'Nuclear Void Reaver':
                     if(this.operation.spawn>0){
                         this.operation.spawn--
-                        if(this.operation.timer%120==0){
+                        if(this.operation.spawn%120==0){
                             entities.spawner.pathSpawn(findName('Fallen Guardian',types.enemy),this.movement.id)
                         }
                     }
@@ -2109,9 +2306,11 @@ class enemy extends entity{
                         if(this.life<=this.base.life/10){
                             this.speed=this.recall.speed*3
                             for(let a=0,la=this.attachments.length;a<la;a++){
-                                if(this.attachments[a].name=='VoidReaverEyes'&&this.attachments[a].color[2]>0){
+                                if(this.name=='Void Reaver'&&this.attachments[a].name=='VoidReaverEyes'&&this.attachments[a].color[2]>0){
                                     this.attachments[a].color[0]+=5/6
                                     this.attachments[a].color[2]-=5/6
+                                }else if(this.name=='Nuclear Void Reaver'&&this.attachments[a].name=='VoidReaverEyes'&&this.attachments[a].color[1]<255){
+                                    this.attachments[a].color[1]+=5
                                 }
                             }
                         }else if(this.life<=this.base.life*0.4&&this.anim.armor>0){
@@ -2179,7 +2378,7 @@ class enemy extends entity{
                                         this.operation.timer++
                                         this.size=this.base.size*(1+0.5*lsin(this.operation.timer*3/2))
                                         if(this.operation.timer>=120){
-                                            this.stunRadius(150,300,0)
+                                            this.stunRadius(150,this.name=='Nuclear Void Reaver'?360:300,0)
                                             entities.particles.push(new particle(this.layer,this.position.x,this.position.y,2,[0,0,0],30,0))
                                             this.operation.step=2
                                             this.operation.timer=0
@@ -2202,7 +2401,7 @@ class enemy extends entity{
                                         if(this.operation.timer<=30){
                                             this.anim.hand.main+=this.operation.diff/30
                                         }else if(this.operation.timer==60){
-                                            this.summonPosition(6,25,this.spawns)
+                                            this.summonPosition(this.name=='Nuclear Void Reaver'?8:6,25,this.spawns)
                                         }else if(this.operation.timer>90){
                                             this.anim.hand.main-=this.operation.diff/30
                                         }
@@ -2230,7 +2429,7 @@ class enemy extends entity{
                                         }else{
                                             this.anim.hand.main-=this.operation.diff/60
                                         }
-                                        if(this.operation.timer>=60&&this.operation.timer%10==0){
+                                        if(this.operation.timer>=60&&this.operation.timer%(this.name=='Nuclear Void Reaver'?8:10)==0){
                                             entities.projectiles.push(new projectile(this.layer,this.position.x,this.position.y,3,0,this.direction+225-15*this.operation.stagger,180,0))
                                             this.operation.stagger++
                                         }
@@ -2258,7 +2457,7 @@ class enemy extends entity{
                                         }else if(this.operation.timer==30||this.operation.timer==36||this.operation.timer==42||this.operation.timer==48||this.operation.timer==54){
                                             entities.particles.push(new particle(this.layer,this.position.x,this.position.y,7,[0,0,0],100,this.direction))
                                         }else if(this.operation.timer==60){
-                                            this.summonPosition(this.stunAngle(1000,30,150,0),25,['Soul'])
+                                            this.summonPosition(this.stunAngle(1000,30,this.name=='Nuclear Void Reaver'?180:150,0),25,['Soul'])
                                         }else if(this.operation.timer>90){
                                             this.anim.hand.main-=this.operation.diff/30
                                         }
@@ -2281,7 +2480,7 @@ class enemy extends entity{
                                     case 1:
                                         this.operation.timer++
                                         this.anim.hand.main+=2
-                                        if(this.operation.timer%30==0){
+                                        if(this.operation.timer%(this.name=='Nuclear Void Reaver'?20:30)==0){
                                             entities.projectiles.push(new projectile(this.layer,this.position.x,this.position.y,3,0,this.direction+this.anim.hand.main,180,0))
                                         }
                                         if(this.operation.timer>=180){
@@ -2304,8 +2503,8 @@ class enemy extends entity{
                                         this.operation.timer++
                                         this.size=this.base.size*(1+0.5*lsin(this.operation.timer*3/4))
                                         if(this.operation.timer>=240){
-                                            this.stunRadius(250,480,0)
-                                            for(let a=0,la=24;a<la;a++){
+                                            this.stunRadius(250,this.name=='Nuclear Void Reaver'?576:480,0)
+                                            for(let a=0,la=this.name=='Nuclear Void Reaver'?30:24;a<la;a++){
                                                 entities.projectiles.push(new projectile(this.layer,this.position.x,this.position.y,3,0,this.direction+360*a/la,180,0))
                                             }
                                             entities.particles.push(new particle(this.layer,this.position.x,this.position.y,2,[0,0,0],50,0))
@@ -2313,7 +2512,7 @@ class enemy extends entity{
                                             this.operation.timer=0
                                             this.speed=this.recall.speed
                                             this.operation.shield=960
-                                            this.operation.spawn=480
+                                            this.operation.spawn=540
                                         }
                                     break
                                     case 2:
@@ -2362,6 +2561,14 @@ class enemy extends entity{
                             if(dist(this.position.x,this.position.y,entities.enemies[a].position.x,entities.enemies[a].position.y)<125&&entities.enemies[a].life<=10000){
                                 entities.enemies[a].speed*=1.5
                                 entities.enemies[a].recall.speed*=1.5
+                            }
+                        }
+                    break
+                    case 'Splatter':
+                        entities.particles.push(new particle(this.layer,this.position.x,this.position.y,2,[190,200,195],70,0))
+                        for(let a=0,la=entities.towers.length;a<la;a++){
+                            if(dist(this.position.x,this.position.y,entities.towers[a].position.x,entities.towers[a].position.y)<280){
+                                entities.towers[a].applyStun(240,0)
                             }
                         }
                     break
