@@ -64,7 +64,8 @@ class enemy extends entity{
         
         if(this.movement==undefined){
             this.movement={
-                path:game.path[this.id%game.path.length],
+                id:this.id%game.path.length,
+                path:game.path[id],
                 position:0,
                 progress:0,
                 totalProgress:0,
@@ -125,6 +126,14 @@ class enemy extends entity{
                 this.anim.hand={main:0}
                 this.operation={timer:0,step:0,target:{x:0,y:0},attack:0}
             break
+            case 'Void Reaver':
+                this.anim.shield=0
+                this.anim.armor=1
+                this.anim.hand={main:0}
+                this.operation={timer:0,step:0,target:{x:0,y:0},attack:0,shield:0,spawn:0}
+                this.anim.hand={main:0}
+                this.spawns=['Fallen','Chained Boss','Boomer','Mega Speedy','Mystery Boss','Circuit','Templar','Slow King','Soul','Health Cultist','Fallen Guardian','Unknown','White Balloon','Zebra Balloon']
+            break
         }
         for(let a=0,la=this.attachments.length;a<la;a++){
             switch(this.attachments[a].name){
@@ -143,6 +152,12 @@ class enemy extends entity{
                 break
                 case 'LeadBalloon':
                     this.anim.attachments.push({direction:[0,120,240],radius:24,state:0})
+                break
+                case 'WhiteBalloon':
+                    this.anim.attachments.push({direction:[0,60,120,180,240,300],radius:28,state:0})
+                break
+                case 'ZebraBalloon':
+                    this.anim.attachments.push({direction:[0,180],radius:32,state:0})
                 break
                 case 'SlowKingShield':
                     this.anim.attachments.push({main:1})
@@ -570,7 +585,7 @@ class enemy extends entity{
                             for(let a=0,la=4;a<la;a++){
                                 this.layer.arc(0,0,48,48,-30+a*90,30+a*90)
                             }
-                            this.layer.stroke(125,105,0,this.fade*this.anim.shield)
+                            this.layer.stroke(this.attachments[a].color[1][0],this.attachments[a].color[1][1],this.attachments[a].color[1][2],this.fade*this.anim.attachments[a].main)
                             this.layer.strokeWeight(1)
                             this.layer.rotate(16)
                             if(this.life>0){
@@ -597,6 +612,7 @@ class enemy extends entity{
                                     this.layer.line(-2,26,2,26)
                                 }
                             }
+                            this.layer.rotate(this.time*-1.5)
                         break
                         case 'SlowKingCape':
                             this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
@@ -1020,6 +1036,123 @@ class enemy extends entity{
                             this.layer.arc(-4,2,6,6,35,205)
 				            this.layer.arc(4,2,6,6,-35,155)
                         break
+                        case 'WhiteBalloon':
+                            this.layer.stroke(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade)
+                            this.layer.strokeWeight(2)
+                            for(let b=0,lb=6-this.anim.attachments[a].state;b<lb;b++){
+                				this.layer.line(0,0,lsin(this.anim.attachments[a].direction[b]+this.time+this.direction)*this.anim.attachments[a].radius,lcos(this.anim.attachments[a].direction[b]+this.time+this.direction)*this.anim.attachments[a].radius)
+                            }
+                            this.layer.fill(this.attachments[a].color[1][0],this.attachments[a].color[1][1],this.attachments[a].color[1][2],this.fade)
+                            this.layer.noStroke()
+                            for(let b=0,lb=6-this.anim.attachments[a].state;b<lb;b++){
+                				this.layer.ellipse(lsin(this.anim.attachments[a].direction[b]+this.time+this.direction)*this.anim.attachments[a].radius,lcos(this.anim.attachments[a].direction[b]+this.time+this.direction)*this.anim.attachments[a].radius,16,16)
+                            }
+                            this.layer.fill(this.attachments[a].color[2][0],this.attachments[a].color[2][1],this.attachments[a].color[2][2],this.fade)
+                            for(let b=0,lb=6-this.anim.attachments[a].state;b<lb;b++){
+                				this.layer.ellipse(lsin(this.anim.attachments[a].direction[b]+this.time+this.direction)*this.anim.attachments[a].radius,lcos(this.anim.attachments[a].direction[b]+this.time+this.direction)*this.anim.attachments[a].radius,10,10)
+                            }
+                        break
+                        case 'ZebraBalloon':
+                            this.layer.stroke(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade)
+                            this.layer.strokeWeight(2)
+                            for(let b=0,lb=2-this.anim.attachments[a].state;b<lb;b++){
+                				this.layer.line(0,0,lsin(this.anim.attachments[a].direction[b]+this.time+this.direction)*this.anim.attachments[a].radius,lcos(this.anim.attachments[a].direction[b]+this.time+this.direction)*this.anim.attachments[a].radius)
+                            }
+                            this.layer.fill(this.attachments[a].color[1][0],this.attachments[a].color[1][1],this.attachments[a].color[1][2],this.fade)
+                            this.layer.noStroke()
+                            for(let b=0,lb=2-this.anim.attachments[a].state;b<lb;b++){
+                				this.layer.ellipse(lsin(this.anim.attachments[a].direction[b]+this.time+this.direction)*this.anim.attachments[a].radius,lcos(this.anim.attachments[a].direction[b]+this.time+this.direction)*this.anim.attachments[a].radius,27,27)
+                            }
+                            this.layer.fill(this.attachments[a].color[2][0],this.attachments[a].color[2][1],this.attachments[a].color[2][2],this.fade)
+                            for(let b=0,lb=2-this.anim.attachments[a].state;b<lb;b++){
+                                this.layer.push()
+                                this.layer.translate(lsin(this.anim.attachments[a].direction[b]+this.time+this.direction)*this.anim.attachments[a].radius,lcos(this.anim.attachments[a].direction[b]+this.time+this.direction)*this.anim.attachments[a].radius)
+                                this.layer.rotate(-this.direction)
+                                this.layer.arc(5,0,36,27,-187,-174)
+                                this.layer.arc(-4,-4,33,16,-14,0)
+                                this.layer.arc(-4,4,33,16,0,14)
+                                this.layer.arc(3,-8,27,9,-180,-160)
+                                this.layer.arc(3,8,27,9,-200,-180)
+                                this.layer.pop()
+                            }
+                        break
+                        case 'VoidReaverArms':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.ellipse(15*lcos(lsin(this.rates.main*4)*20+this.anim.hand.main),15*lsin(lsin(this.rates.main*4)*20+this.anim.hand.main),12)
+                            this.layer.ellipse(-15*lcos(lsin(this.rates.main*4)*20),-15*lsin(lsin(this.rates.main*4)*20),12)
+                        break
+                        case 'VoidReaverArmorArms':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*this.anim.armor)
+                            this.layer.arc(15*lcos(lsin(this.rates.main*4)*20+this.anim.hand.main),15*lsin(lsin(this.rates.main*4)*20+this.anim.hand.main),13,13,lsin(this.rates.main*4)*20+this.anim.hand.main-270,lsin(this.rates.main*4)*20+this.anim.hand.main-90)
+                            this.layer.arc(-15*lcos(lsin(this.rates.main*4)*20),-15*lsin(lsin(this.rates.main*4)*20),13,13,lsin(this.rates.main*4)*20-90,lsin(this.rates.main*4)*20+90)
+                        break
+                        case 'VoidReaverEyes':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade)
+                            this.layer.ellipse(-4,3,2)
+                            this.layer.ellipse(4,3,2)
+                            this.layer.ellipse(-5,6,2)
+                            this.layer.ellipse(5,6,2)
+                            this.layer.ellipse(-4,9,2)
+                            this.layer.ellipse(4,9,2)
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*0.4)
+                            for(let b=0,lb=2;b<lb;b++){
+                                this.layer.ellipse(-4,3,3+b)
+                                this.layer.ellipse(4,3,3+b)
+                                this.layer.ellipse(-5,6,3+b)
+                                this.layer.ellipse(5,6,3+b)
+                                this.layer.ellipse(-4,9,3+b)
+                                this.layer.ellipse(4,9,3+b)
+                            }
+                        break
+                        case 'VoidReaverArmor':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*this.anim.armor)
+                            this.layer.ellipse(0,0,25)
+                        break
+                        case 'VoidReaverArmorEyes':
+                            this.layer.fill(this.attachments[a].color[0],this.attachments[a].color[1],this.attachments[a].color[2],this.fade*this.anim.armor)
+                            this.layer.ellipse(-4,3,3)
+                            this.layer.ellipse(4,3,3)
+                            this.layer.ellipse(-5,6,3)
+                            this.layer.ellipse(5,6,3)
+                            this.layer.ellipse(-4,9,3)
+                            this.layer.ellipse(4,9,3)
+                        break
+                        case 'VoidReaverShield':
+                            this.layer.rotate(this.time*1.5)
+                            this.layer.stroke(this.attachments[a].color[0][0],this.attachments[a].color[0][1],this.attachments[a].color[0][2],this.fade*this.anim.shield)
+                            this.layer.strokeWeight(6)
+                            for(let a=0,la=4;a<la;a++){
+                                this.layer.arc(0,0,48,48,-30+a*90,30+a*90)
+                            }
+                            this.layer.stroke(this.attachments[a].color[1][0],this.attachments[a].color[1][1],this.attachments[a].color[1][2],this.fade*this.anim.shield)
+                            this.layer.strokeWeight(1)
+                            this.layer.rotate(16)
+                            if(this.life>0){
+                                for(let a=0,la=4;a<la;a++){
+                                    this.layer.rotate(58)
+                                    this.layer.line(-1.5,22,1.5,22)
+                                    this.layer.line(1.5,22,0,26)
+                                    this.layer.rotate(32)
+                                    this.layer.line(-1.5,22,1.5,22)
+                                    this.layer.line(1.5,22,0,26)
+                                }
+                            }
+                            else{
+                                for(let a=0,la=4;a<la;a++){
+                                    this.layer.rotate(58)
+                                    this.layer.line(-2,22,-2,26)
+                                    this.layer.line(-2,22,2,22)
+                                    this.layer.line(-2,24,2,24)
+                                    this.layer.line(-2,26,2,26)
+                                    this.layer.rotate(32)
+                                    this.layer.line(-2,22,-2,26)
+                                    this.layer.line(-2,22,2,22)
+                                    this.layer.line(-2,24,2,24)
+                                    this.layer.line(-2,26,2,26)
+                                }
+                            }
+                            this.layer.rotate(this.time*-1.5)
+                        break
 
 
 
@@ -1169,6 +1302,10 @@ class enemy extends entity{
                     this.position.y=round(this.position.y/50)*50
                 }
                 this.direction=round(this.direction/90)*90
+                if(this.movement.position>=this.movement.path.length){
+                    game.lives-=ceil(this.life)
+                    this.life=0
+                }
             }
             for(let a=0,la=this.attachments.length;a<la;a++){
                 switch(this.attachments[a].name){
@@ -1221,6 +1358,44 @@ class enemy extends entity{
                     case 'VindicatorArms': case 'VindicatorArmsGlow': case 'VindicatorArmbands': case 'VindicatorShield':
                         this.anim.attachments[a].main=smoothAnim(this.anim.attachments[a].main,this.life/this.base.life<this.attachments[a].metric,0,1,15)
                     break
+                    case 'WhiteBalloon':
+                        if(this.life<=this.base.life*(6/7-this.anim.attachments[a].state/7)){
+                            entities.particles.push(new particle(this.layer,
+                                this.position.x+lsin(this.time+this.anim.attachments[a].direction[2-this.anim.attachments[a].state])*this.anim.attachments[a].radius,
+                                this.position.y+lcos(this.time+this.anim.attachments[a].direction[2-this.anim.attachments[a].state])*this.anim.attachments[a].radius,
+                                5,[0,0,0],5,0))
+                            this.anim.attachments[a].state++
+                        }
+                        if(this.anim.attachments[a].radius>[28,27,25,22,16,4,0][this.anim.attachments[a].state]){
+                            this.anim.attachments[a].radius--
+                        }
+                        for(let b=0,lb=6-this.anim.attachments[a].state;b<lb;b++){
+                            if(this.anim.attachments[a].direction[b]>360*b/lb+5){
+                                this.anim.attachments[a].direction[b]-=5
+                            }else if(this.anim.attachments[a].direction[b]<360*b/lb-5){
+                                this.anim.attachments[a].direction[b]+=5
+                            }
+                        }
+                    break
+                    case 'ZebraBalloon':
+                        if(this.life<=this.base.life*(2/3-this.anim.attachments[a].state/3)){
+                            entities.particles.push(new particle(this.layer,
+                                this.position.x+lsin(this.time+this.anim.attachments[a].direction[2-this.anim.attachments[a].state])*this.anim.attachments[a].radius,
+                                this.position.y+lcos(this.time+this.anim.attachments[a].direction[2-this.anim.attachments[a].state])*this.anim.attachments[a].radius,
+                                5,[0,0,0],5,0))
+                            this.anim.attachments[a].state++
+                        }
+                        if(this.anim.attachments[a].radius>[32,8,0][this.anim.attachments[a].state]){
+                            this.anim.attachments[a].radius--
+                        }
+                        for(let b=0,lb=2-this.anim.attachments[a].state;b<lb;b++){
+                            if(this.anim.attachments[a].direction[b]>360*b/lb+5){
+                                this.anim.attachments[a].direction[b]-=5
+                            }else if(this.anim.attachments[a].direction[b]<360*b/lb-5){
+                                this.anim.attachments[a].direction[b]+=5
+                            }
+                        }
+                    break
                 }
             }
             switch(this.name){
@@ -1251,6 +1426,9 @@ class enemy extends entity{
                         entities.particles.push(new particle(this.layer,this.position.x,this.position.y,1,[0,205,255],this.size,random(0,360)))
                     }
                 break
+                case 'Lead Balloon':
+                    this.speed=this.recall.speed*(this.life<this.base.life*0.25?0.5:1)
+                break
                 case 'Gold Guard':
                     if(this.operation.step==0){
                         this.speed=this.recall.speed*(this.life<this.base.life*0.75?1/5:1)
@@ -1272,6 +1450,17 @@ class enemy extends entity{
                         let spin=random(0,360)
                         let distance=sqrt(random(900))
                         entities.particles.push(new particle(this.layer,this.position.x+lsin(spin)*distance,this.position.y+lcos(spin)*distance,1,[30,30,30],this.size,spin))
+                    }
+                break
+                case 'White Balloon':
+                    this.speed=this.recall.speed*(this.life<this.base.life/7?0.4:1)
+                break
+                case 'Zebra Balloon':
+                    this.speed=this.recall.speed*(this.life<this.base.life/3?1/3:1)
+                break
+                case 'Void Reaver':
+                    if(this.time%5==0&&this.anim.armor<=0){
+                        entities.particles.push(new particle(this.layer,this.position.x,this.position.y,8,[0,0,0],this.size,random(0,360)))
                     }
                 break
             }
@@ -1546,7 +1735,7 @@ class enemy extends entity{
                         switch(this.operation.step){
                             case 0:
                                 for(let a=0,la=entities.towers.length;a<la;a++){
-                                    if(dist(entities.towers[a].position.x,entities.towers[a].position.y,this.position.x,this.position.y)<100){
+                                    if(dist(entities.towers[a].position.x,entities.towers[a].position.y,this.position.x,this.position.y)<75){
                                         this.operation.step=1
                                         this.operation.timer=0
                                         this.operation.target={x:entities.towers[a].position.x,y:entities.towers[a].position.y}
@@ -1559,7 +1748,7 @@ class enemy extends entity{
                                 this.operation.timer++
                                 this.size=this.base.size*(1+0.5*lsin(this.operation.timer*3/2))
                                 if(this.operation.timer>=120){
-                                    this.stunRadius(120,180,0)
+                                    this.stunRadius(90,180,0)
                                     entities.particles.push(new particle(this.layer,this.position.x,this.position.y,2,[0,0,0],30,0))
                                     this.operation.step=2
                                     this.operation.timer=0
@@ -1779,13 +1968,163 @@ class enemy extends entity{
                     case 'Molten':
                         this.life=min(this.life+0.1,this.base.life)
                     break
-                    case 'Molten Titan':
-                        if(this.operation.step==0){
-                            let option=floor(random(0,3))
+
+                }
+            }
+            switch(this.name){
+                case 'Molten Titan':
+                    if(this.operation.step==0){
+                        let option=floor(random(0,3))
+                        switch(option){
+                            case 0:
+                                for(let a=0,la=entities.towers.length;a<la;a++){
+                                    if(dist(entities.towers[a].position.x,entities.towers[a].position.y,this.position.x,this.position.y)<100){
+                                        this.operation.step=1
+                                        this.operation.timer=0
+                                        this.operation.target={x:entities.towers[a].position.x,y:entities.towers[a].position.y}
+                                        this.operation.attack=0
+                                        this.speed=0
+                                        la=0
+                                    }
+                                }
+                            break
+                            case 1:
+                                if(floor(random(0,300))==0){
+                                    this.operation.step=1
+                                    this.operation.timer=0
+                                    this.operation.attack=1
+                                    this.speed=0
+                                }
+                            break
+                            case 2:
+                                for(let a=0,la=entities.towers.length;a<la;a++){
+                                    let direction=atan2(entities.towers[a].position.x-this.position.x,entities.towers[a].position.y-this.position.y)
+                                    if((abs(this.direction-direction)<45||abs(this.direction-direction-360)<45||abs(this.direction-direction+360)<45||abs(this.direction-direction-720)<45||abs(this.direction-direction+720)<45)&&floor(random(0,300))==0&&!entities.towers[a].stunned){
+                                        this.operation.step=1
+                                        this.operation.timer=0
+                                        this.operation.target={x:entities.towers[a].position.x,y:entities.towers[a].position.y}
+                                        this.operation.attack=2
+                                        this.speed=0
+                                        this.operation.stagger=0
+                                        la=0
+                                    }
+                                }
+                            break
+                        }
+                    }else{
+                        switch(this.operation.attack){
+                            case 0:
+                                switch(this.operation.step){
+                                    case 1:
+                                        this.operation.timer++
+                                        this.size=this.base.size*(1+0.5*lsin(this.operation.timer*3/2))
+                                        if(this.operation.timer>=120){
+                                            this.stunRadius(120,240,0)
+                                            entities.particles.push(new particle(this.layer,this.position.x,this.position.y,2,[0,0,0],30,0))
+                                            this.operation.step=2
+                                            this.operation.timer=0
+                                            this.speed=this.recall.speed
+                                        }
+                                    break
+                                    case 2:
+                                        this.operation.timer++
+                                        if(this.operation.timer==300){
+                                            this.operation.step=0
+                                        }
+                                    break
+                                }
+                            break
+                            case 1:
+                                switch(this.operation.step){
+                                    case 1:
+                                        this.operation.timer++
+                                        this.operation.diff=-90-lsin(this.rates.main*4)*20
+                                        if(this.operation.timer<=30){
+                                            this.anim.hand.main+=this.operation.diff/30
+                                        }else if(this.operation.timer==60){
+                                            this.summonPosition(5,25,['Molten'])
+                                        }else if(this.operation.timer>90){
+                                            this.anim.hand.main-=this.operation.diff/30
+                                        }
+                                        if(this.operation.timer>=120){
+                                            this.operation.step=2
+                                            this.operation.timer=0
+                                            this.speed=this.recall.speed
+                                        }
+                                    break
+                                    case 2:
+                                        this.operation.timer++
+                                        if(this.operation.timer==450){
+                                            this.operation.step=0
+                                        }
+                                    break
+                                }
+                            break
+                            case 2:
+                                switch(this.operation.step){
+                                    case 1:
+                                        this.operation.timer++
+                                        this.operation.diff=-135-lsin(this.rates.main*4)*20
+                                        if(this.operation.timer<=60){
+                                            this.anim.hand.main+=this.operation.diff/60
+                                        }else{
+                                            this.anim.hand.main-=this.operation.diff/60
+                                        }
+                                        if(this.operation.timer>=60&&this.operation.timer%15==0){
+                                            entities.projectiles.push(new projectile(this.layer,this.position.x,this.position.y,2,0,this.direction+140+20*this.operation.stagger,120,0))
+                                            this.operation.stagger++
+                                        }
+                                        if(this.operation.timer>=120){
+                                            this.operation.step=2
+                                            this.operation.timer=0
+                                            this.speed=this.recall.speed
+                                        }
+                                    break
+                                    case 2:
+                                        this.operation.timer++
+                                        if(this.operation.timer==300){
+                                            this.operation.step=0
+                                        }
+                                    break
+                                }
+                            break
+                        }
+                    }
+                break
+                case 'Void Reaver':
+                    if(this.operation.spawn>0){
+                        this.operation.spawn--
+                        if(this.operation.timer%120==0){
+                            entities.spawner.pathSpawn(findName('Fallen Guardian',types.enemy),this.movement.id)
+                        }
+                    }
+                    if(this.operation.shield>0){
+                        this.operation.shield--
+                        this.shieldLevel=7
+                    }else{
+                        this.shieldLevel=0
+                    }
+                    this.anim.shield=smoothAnim(this.anim.shield,this.operation.shield>0,0,1,5)
+                    if(this.operation.step==0){
+                        if(this.life<=this.base.life/10){
+                            this.speed=this.recall.speed*3
+                            for(let a=0,la=this.attachments.length;a<la;a++){
+                                if(this.attachments[a].name=='VoidReaverEyes'&&this.attachments[a].color[2]>0){
+                                    this.attachments[a].color[0]+=5/6
+                                    this.attachments[a].color[2]-=5/6
+                                }
+                            }
+                        }else if(this.life<=this.base.life*0.4&&this.anim.armor>0){
+                            this.operation.step=1
+                            this.operation.timer=0
+                            this.operation.attack=5
+                            this.speed=0
+                        }else{
+                            let option=this.anim.armor<=0?floor(random(2,4.5)):floor(random(0,1.5))
                             switch(option){
                                 case 0:
                                     for(let a=0,la=entities.towers.length;a<la;a++){
-                                        if(dist(entities.towers[a].position.x,entities.towers[a].position.y,this.position.x,this.position.y)<150){
+                                        if(dist(entities.towers[a].position.x,entities.towers[a].position.y,this.position.x,this.position.y)<125){
                                             this.operation.step=1
                                             this.operation.timer=0
                                             this.operation.target={x:entities.towers[a].position.x,y:entities.towers[a].position.y}
@@ -1795,18 +2134,18 @@ class enemy extends entity{
                                         }
                                     }
                                 break
-                                case 1:
+                                case 1: case 4:
                                     if(floor(random(0,300))==0){
                                         this.operation.step=1
                                         this.operation.timer=0
-                                        this.operation.attack=1
+                                        this.operation.attack=option
                                         this.speed=0
                                     }
                                 break
                                 case 2:
                                     for(let a=0,la=entities.towers.length;a<la;a++){
                                         let direction=atan2(entities.towers[a].position.x-this.position.x,entities.towers[a].position.y-this.position.y)
-                                        if((abs(this.direction-direction)<45||abs(this.direction-direction-360)<45||abs(this.direction-direction+360)<45||abs(this.direction-direction-720)<45||abs(this.direction-direction+720)<45)&&floor(random(0,300))==0){
+                                        if((abs(this.direction-direction)<45||abs(this.direction-direction-360)<45||abs(this.direction-direction+360)<45||abs(this.direction-direction-720)<45||abs(this.direction-direction+720)<45)&&floor(random(0,300))==0&&!entities.towers[a].stunned){
                                             this.operation.step=1
                                             this.operation.timer=0
                                             this.operation.target={x:entities.towers[a].position.x,y:entities.towers[a].position.y}
@@ -1817,91 +2156,186 @@ class enemy extends entity{
                                         }
                                     }
                                 break
-                            }
-                        }else{
-                            switch(this.operation.attack){
-                                case 0:
-                                    switch(this.operation.step){
-                                        case 1:
-                                            this.operation.timer++
-                                            this.size=this.base.size*(1+0.5*lsin(this.operation.timer*3/2))
-                                            if(this.operation.timer>=120){
-                                                this.stunRadius(180,240,0)
-                                                entities.particles.push(new particle(this.layer,this.position.x,this.position.y,2,[0,0,0],30,0))
-                                                this.operation.step=2
-                                                this.operation.timer=0
-                                                this.speed=this.recall.speed
-                                            }
-                                        break
-                                        case 2:
-                                            this.operation.timer++
-                                            if(this.operation.timer==300){
-                                                this.operation.step=0
-                                            }
-                                        break
-                                    }
-                                break
-                                case 1:
-                                    switch(this.operation.step){
-                                        case 1:
-                                            this.operation.timer++
-                                            this.operation.diff=-90-lsin(this.rates.main*4)*20
-                                            if(this.operation.timer<=30){
-                                                this.anim.hand.main+=this.operation.diff/30
-                                            }else if(this.operation.timer==60){
-                                                this.summonPosition(5,25,['Molten'])
-                                            }else if(this.operation.timer>90){
-                                                this.anim.hand.main-=this.operation.diff/30
-                                            }
-                                            if(this.operation.timer>=120){
-                                                this.operation.step=2
-                                                this.operation.timer=0
-                                                this.speed=this.recall.speed
-                                            }
-                                        break
-                                        case 2:
-                                            this.operation.timer++
-                                            if(this.operation.timer==450){
-                                                this.operation.step=0
-                                            }
-                                        break
-                                    }
-                                break
-                                case 2:
-                                    switch(this.operation.step){
-                                        case 1:
-                                            this.operation.timer++
-                                            this.operation.diff=-135-lsin(this.rates.main*4)*20
-                                            if(this.operation.timer<=60){
-                                                this.anim.hand.main+=this.operation.diff/60
-                                            }else{
-                                                this.anim.hand.main-=this.operation.diff/60
-                                            }
-                                            if(this.operation.timer>=60&&this.operation.timer%15==0){
-                                                entities.projectiles.push(new projectile(this.layer,this.position.x,this.position.y,2,0,this.direction+140+20*this.operation.stagger,120,0))
-                                                this.operation.stagger++
-                                                print(this.operation.stagger)
-                                            }
-                                            if(this.operation.timer>=120){
-                                                this.operation.step=2
-                                                this.operation.timer=0
-                                                this.speed=this.recall.speed
-                                            }
-                                        break
-                                        case 2:
-                                            this.operation.timer++
-                                            if(this.operation.timer==300){
-                                                this.operation.step=0
-                                            }
-                                        break
+                                case 3:
+                                    for(let a=0,la=entities.towers.length;a<la;a++){
+                                        let direction=atan2(entities.towers[a].position.x-this.position.x,entities.towers[a].position.y-this.position.y)
+                                        if((abs(this.direction-direction)<25||abs(this.direction-direction-360)<25||abs(this.direction-direction+360)<25||abs(this.direction-direction-720)<25||abs(this.direction-direction+720)<25)&&floor(random(0,300))==0&&!entities.towers[a].stunned){
+                                            this.operation.step=1
+                                            this.operation.timer=0
+                                            this.operation.target={x:entities.towers[a].position.x,y:entities.towers[a].position.y}
+                                            this.operation.attack=3
+                                            this.speed=0
+                                            la=0
+                                        }
                                     }
                                 break
                             }
                         }
-                    break
+                    }else{
+                        switch(this.operation.attack){
+                            case 0:
+                                switch(this.operation.step){
+                                    case 1:
+                                        this.operation.timer++
+                                        this.size=this.base.size*(1+0.5*lsin(this.operation.timer*3/2))
+                                        if(this.operation.timer>=120){
+                                            this.stunRadius(150,300,0)
+                                            entities.particles.push(new particle(this.layer,this.position.x,this.position.y,2,[0,0,0],30,0))
+                                            this.operation.step=2
+                                            this.operation.timer=0
+                                            this.speed=this.recall.speed
+                                        }
+                                    break
+                                    case 2:
+                                        this.operation.timer++
+                                        if(this.operation.timer==300){
+                                            this.operation.step=0
+                                        }
+                                    break
+                                }
+                            break
+                            case 1:
+                                switch(this.operation.step){
+                                    case 1:
+                                        this.operation.timer++
+                                        this.operation.diff=90-lsin(this.rates.main*4)*20
+                                        if(this.operation.timer<=30){
+                                            this.anim.hand.main+=this.operation.diff/30
+                                        }else if(this.operation.timer==60){
+                                            this.summonPosition(6,25,this.spawns)
+                                        }else if(this.operation.timer>90){
+                                            this.anim.hand.main-=this.operation.diff/30
+                                        }
+                                        if(this.operation.timer>=120){
+                                            this.operation.step=2
+                                            this.operation.timer=0
+                                            this.speed=this.recall.speed
+                                        }
+                                    break
+                                    case 2:
+                                        this.operation.timer++
+                                        if(this.operation.timer==450){
+                                            this.operation.step=0
+                                        }
+                                    break
+                                }
+                            break
+                            case 2:
+                                switch(this.operation.step){
+                                    case 1:
+                                        this.operation.timer++
+                                        this.operation.diff=135-lsin(this.rates.main*4)*20
+                                        if(this.operation.timer<=60){
+                                            this.anim.hand.main+=this.operation.diff/60
+                                        }else{
+                                            this.anim.hand.main-=this.operation.diff/60
+                                        }
+                                        if(this.operation.timer>=60&&this.operation.timer%10==0){
+                                            entities.projectiles.push(new projectile(this.layer,this.position.x,this.position.y,3,0,this.direction+225-15*this.operation.stagger,180,0))
+                                            this.operation.stagger++
+                                        }
+                                        if(this.operation.timer>=120){
+                                            this.operation.step=2
+                                            this.operation.timer=0
+                                            this.speed=this.recall.speed
+                                        }
+                                    break
+                                    case 2:
+                                        this.operation.timer++
+                                        if(this.operation.timer==300){
+                                            this.operation.step=0
+                                        }
+                                    break
+                                }
+                            break
+                            case 3:
+                                switch(this.operation.step){
+                                    case 1:
+                                        this.operation.timer++
+                                        this.operation.diff=90-lsin(this.rates.main*4)*20
+                                        if(this.operation.timer<=30){
+                                            this.anim.hand.main+=this.operation.diff/30
+                                        }else if(this.operation.timer==30||this.operation.timer==36||this.operation.timer==42||this.operation.timer==48||this.operation.timer==54){
+                                            entities.particles.push(new particle(this.layer,this.position.x,this.position.y,7,[0,0,0],100,this.direction))
+                                        }else if(this.operation.timer==60){
+                                            this.summonPosition(this.stunAngle(1000,30,150,0),25,['Soul'])
+                                        }else if(this.operation.timer>90){
+                                            this.anim.hand.main-=this.operation.diff/30
+                                        }
+                                        if(this.operation.timer>=120){
+                                            this.operation.step=2
+                                            this.operation.timer=0
+                                            this.speed=this.recall.speed
+                                        }
+                                    break
+                                    case 2:
+                                        this.operation.timer++
+                                        if(this.operation.timer==450){
+                                            this.operation.step=0
+                                        }
+                                    break
+                                }
+                            break
+                            case 4:
+                                switch(this.operation.step){
+                                    case 1:
+                                        this.operation.timer++
+                                        this.anim.hand.main+=2
+                                        if(this.operation.timer%30==0){
+                                            entities.projectiles.push(new projectile(this.layer,this.position.x,this.position.y,3,0,this.direction+this.anim.hand.main,180,0))
+                                        }
+                                        if(this.operation.timer>=180){
+                                            this.operation.step=2
+                                            this.operation.timer=0
+                                            this.speed=this.recall.speed
+                                        }
+                                    break
+                                    case 2:
+                                        this.operation.timer++
+                                        if(this.operation.timer==450){
+                                            this.operation.step=0
+                                        }
+                                    break
+                                }
+                            break
+                            case 5:
+                                switch(this.operation.step){
+                                    case 1:
+                                        this.operation.timer++
+                                        this.size=this.base.size*(1+0.5*lsin(this.operation.timer*3/4))
+                                        if(this.operation.timer>=240){
+                                            this.stunRadius(250,480,0)
+                                            for(let a=0,la=24;a<la;a++){
+                                                entities.projectiles.push(new projectile(this.layer,this.position.x,this.position.y,3,0,this.direction+360*a/la,180,0))
+                                            }
+                                            entities.particles.push(new particle(this.layer,this.position.x,this.position.y,2,[0,0,0],50,0))
+                                            this.operation.step=2
+                                            this.operation.timer=0
+                                            this.speed=this.recall.speed
+                                            this.operation.shield=960
+                                            this.operation.spawn=480
+                                        }
+                                    break
+                                    case 2:
+                                        this.anim.armor-=1/60
+                                        this.operation.timer++
+                                        if(this.operation.timer==60){
+                                            this.operation.step=3
+                                            this.operation.timer=0
+                                        }
+                                    break
+                                    case 3:
+                                        this.operation.timer++
+                                        if(this.operation.timer==300){
+                                            this.operation.step=0
+                                        }
+                                    break
+                                }
+                            break
+                        }
+                    }
+                break
 
-
-                }
             }
         }else{
             if(!this.trigger.death){

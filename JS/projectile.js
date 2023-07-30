@@ -17,6 +17,11 @@ class projectile extends entity{
                 this.speed=2
                 this.size=10
             break
+            case 3:
+                this.timer=360
+                this.speed=3
+                this.size=12
+            break
         }
     }
     display(){
@@ -30,7 +35,11 @@ class projectile extends entity{
             break
             case 2:
                 this.layer.fill(255,150,0,this.fade)
-                this.layer.ellipse(0,0,20,20)
+                this.layer.ellipse(0,0,20)
+            break
+            case 3:
+                this.layer.fill(0,this.fade)
+                this.layer.ellipse(0,0,24)
             break
         }
         this.layer.pop()
@@ -45,6 +54,11 @@ class projectile extends entity{
             case 2:
                 if(this.time%30==0){
                     entities.particles.push(new particle(this.layer,this.position.x,this.position.y,1,[30,30,30],1,random(0,360)))
+                }
+            break
+            case 3:
+                if(this.time%15==0){
+                    entities.particles.push(new particle(this.layer,this.position.x,this.position.y,8,[0,0,0],1,random(0,360)))
                 }
             break
         }

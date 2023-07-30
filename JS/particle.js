@@ -9,7 +9,7 @@ class particle extends entity{
                 this.scale=1
                 this.fade=1
             break
-            case 2: case 3: case 5:
+            case 2: case 3: case 5: case 7:
                 this.scale=0
                 this.fade=1
             break
@@ -17,6 +17,10 @@ class particle extends entity{
                 this.fade=0
                 this.scale=1
                 this.trigger=false
+            break
+            case 8:
+                this.scale=1
+                this.fade=2
             break
         }
     }
@@ -29,19 +33,19 @@ class particle extends entity{
         switch(this.type){
             case 1:
                 this.layer.fill(this.color[0],this.color[1],this.color[2],this.fade)
-                this.layer.ellipse(0,0,10,10)
+                this.layer.ellipse(0,0,10)
             break
             case 2: case 5:
                 this.layer.stroke(this.color[0],this.color[1],this.color[2],this.fade)
                 this.layer.strokeWeight(0.8)
                 this.layer.noFill()
-                this.layer.ellipse(0,0,10,10)
+                this.layer.ellipse(0,0,10)
             break
             case 3:
                 this.layer.stroke(this.color[0],this.color[1],this.color[2],this.fade)
                 this.layer.strokeWeight(0.4)
                 this.layer.noFill()
-                this.layer.ellipse(0,0,10,10)
+                this.layer.ellipse(0,0,10)
             break
             case 4:
                 this.layer.fill(this.color[0],this.color[1],this.color[2],this.fade)
@@ -59,6 +63,16 @@ class particle extends entity{
                 this.layer.rect(0,0,3,12)
                 this.layer.rect(0,0,12,3)
             break
+            case 7:
+                this.layer.stroke(this.color[0],this.color[1],this.color[2],this.fade)
+                this.layer.strokeWeight(0.4)
+                this.layer.noFill()
+                this.layer.arc(0,0,10,10,60,120)
+            break
+            case 8:
+                this.layer.fill(this.color[0],this.color[1],this.color[2],this.fade)
+                this.layer.ellipse(0,0,5)
+            break
         }
         this.layer.pop()
     }
@@ -74,7 +88,7 @@ class particle extends entity{
                     this.remove=true
                 }
             break
-            case 2: case 3:
+            case 2: case 3: case 7:
                 this.scale+=1/60
                 this.fade-=1/60
                 if(this.fade<=0){
@@ -98,6 +112,16 @@ class particle extends entity{
             case 5:
                 this.scale+=1/15
                 this.fade-=1/15
+                if(this.fade<=0){
+                    this.remove=true
+                }
+            break
+            case 8:
+                this.direction+=2
+                this.scale-=1/60
+                this.fade-=1/30
+                this.position.x+=lsin(this.direction)*this.size
+                this.position.y+=lcos(this.direction)*this.size
                 if(this.fade<=0){
                     this.remove=true
                 }

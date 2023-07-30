@@ -22,6 +22,7 @@ class tower extends entity{
             stun:[0],
         }
         this.stun=[0]
+        this.stunned=false
         switch(this.name){
             case 'Scout':
                 this.anim.weapon={fired:0,firetick:0}
@@ -87,26 +88,30 @@ class tower extends entity{
         }
         this.fade=smoothAnim(this.fade,!this.selling,0,1,10)
         this.anim.selected=smoothAnim(this.anim.selected,this.selected,0,1,10)
+        this.stunned=false
         for(let a=0,la=this.stun.length;a<la;a++){
             if(this.stun[a]>0){
                 this.stun[a]--
+                this.stunned=true
             }
             this.anim.stun[a]=smoothAnim(this.anim.stun[a],this.stun[a]>0,0,1,10)
         }
-        if(this.reloadTimer>0){
-            this.reloadTimer--
-        }else{
-            for(let a=0,la=game.sortedEnemies.length;a<la;a++){
-                let target=entities.enemies[game.sortedEnemies[a]]
-                if(dist(this.position.x,this.position.y,target.position.x,target.position.y)<this.range+12*target.size&&!(target.hidden&&!this.hidden)){
-                    target.takeDamage(this.effect[0],this.effect[1])
-                    this.direction=atan2(target.position.x-this.position.x,this.position.y-target.position.y)
-                    this.reloadTimer=this.reload
-                    a=la
-                    switch(this.name){
-                        case 'Scout':
-                            this.anim.weapon.firetick=4
-                        break
+        if(!this.stunned){
+            if(this.reloadTimer>0){
+                this.reloadTimer--
+            }else{
+                for(let a=0,la=game.sortedEnemies.length;a<la;a++){
+                    let target=entities.enemies[game.sortedEnemies[a]]
+                    if(dist(this.position.x,this.position.y,target.position.x,target.position.y)<this.range+12*target.size&&!(target.hidden&&!this.hidden)){
+                        target.takeDamage(this.effect[0],this.effect[1])
+                        this.direction=atan2(target.position.x-this.position.x,this.position.y-target.position.y)
+                        this.reloadTimer=this.reload
+                        a=la
+                        switch(this.name){
+                            case 'Scout':
+                                this.anim.weapon.firetick=4
+                            break
+                        }
                     }
                 }
             }

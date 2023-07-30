@@ -11,6 +11,9 @@ class spawner{
     quickSpawn(type){
         entities.enemies.push(new enemy(this.layer,this.points[0].x,this.points[0].y,type,0))
     }
+    pathSpawn(type,path){
+        entities.enemies.push(new enemy(this.layer,this.points[path].x,this.points[path].y,type,path))
+    }
     loadWaves(waves){
         for(let a=0,la=waves.length;a<la;a++){
             this.loadWave(waves[a])
